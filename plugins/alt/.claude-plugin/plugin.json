@@ -1,0 +1,14 @@
+{
+  "name": "alt",
+  "displayName": "alt",
+  "version": "0.1.0",
+  "description": "Agentic Lean Techniques: skills, agents, and hooks that have proven useful across client work.",
+  "author": {
+    "name": "Lean Techniques",
+    "email": "jshipley@leantechniques.com"
+  },
+  "homepage": "https://github.com/lt-jshipley/alt",
+  "repository": "https://github.com/lt-jshipley/alt",
+  "license": "MIT",
+  "keywords": ["workflow", "review", "consulting"]
+}

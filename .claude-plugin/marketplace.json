@@ -1,0 +1,27 @@
+{
+  "name": "agenticleantechniques",
+  "owner": {
+    "name": "Lean Techniques",
+    "email": "jshipley@leantechniques.com",
+    "url": "https://github.com/lt-jshipley/alt"
+  },
+  "description": "Claude Code plugins from Lean Techniques client engagements.",
+  "version": "0.1.0",
+  "plugins": [
+    {
+      "name": "alt",
+      "source": "./plugins/alt",
+      "displayName": "alt",
+      "description": "Agentic Lean Techniques: skills, agents, and hooks that have proven useful across client work.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Lean Techniques",
+        "email": "jshipley@leantechniques.com"
+      },
+      "homepage": "https://github.com/lt-jshipley/alt",
+      "repository": "https://github.com/lt-jshipley/alt",
+      "license": "MIT",
+      "keywords": ["workflow", "review", "consulting"]
+    }
+  ]
+}
