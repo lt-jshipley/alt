@@ -1,6 +1,6 @@
 # Grill-me family: research notes
 
-Reviewed 2026-09-03. Public sources were read from their repos at the commits listed. Our own two are read from local checkouts. Skill text quoted below is from those versions.
+Reviewed 2026-09-03, updated 2026-09-04. Public sources were read from their repos at the commits listed. Our own two are read from local checkouts. Skill text quoted below is from those versions. What alt built from this, and what it kept, is at the end under "alt's first two versions."
 
 ## Summary
 
@@ -544,3 +544,46 @@ This is `explore`'s Open Decisions package with the ceremony removed: bullets in
 8. **Provenance of `explore`.** Its text was written for an engagement, not in this repo. Confirm what is ours to reuse before any of it lands in a public MIT plugin. `era` is our own and MIT.
 9. **Whether to inline enough of the ladder and the format into the skill to degrade gracefully when a dependency fails to load**, at the cost of duplicating text `era` deliberately kept in one place.
 10. **A runner seed shared by every alt skill.** Some form of extension that tells each skill who it is talking to: role and seniority, their ladder, where their facts live, where output lands, time budget, and what is already decided. Stated as intent on 2026-09-03; shape undecided. The team half is sketched under "A shared fact-sources extension"; the runner half has no home yet.
+
+## alt's first two versions: elicit and examine
+
+Recorded 2026-09-04. Two skills were built from this research on consecutive days and run side by side. `alt:examine` is the one kept. `alt:elicit` was removed on 2026-09-04; its skill text, README, and design record are in git history at commits `3269f9d` and `ab44957`.
+
+### What elicit was
+
+Built 2026-09-03. A pre-work interview that held the fact-versus-decision line for the runner and decided ownership on their behalf.
+
+- Assumed a runner hat, Implementation Dev by default, stated on the first screen and correctable in plain speech.
+- Ran homework, a two-part hunt, and a five-step refute in order: is it a fact, does the record settle it, should the cause exist, is it cheap and the runner's, otherwise whose. Only the fourth step's survivors reached the runner; the rest were routed to a hat with one line on why it was not theirs.
+- Opened with a first screen: a verdict out of four, wound and question counts, up to three wounds with owner and harm, the runner's own pile as an index, one ask. Twenty lines.
+- Walked one question per screen with a breadcrumb of what was still coming, re-deriving after every answer and showing deltas.
+- Named a gate when four conditions held, which reshaped the verdict to conversation first.
+- Closed with the decided list, the copy-pasteable team list with owner and if-wrong on every bullet, an offer to post to the record, and a handoff line. Then stopped.
+- Introduced presets, the extension file, and the sources file, and the literal-word trigger.
+
+### Why examine replaced it
+
+- **Complexity lived in the skill.** Against Matt Pocock's `grilling`, at 2KB with three concepts and one template, elicit was 10.7KB with about twelve named concepts and eight templates. Rated in this repo: grilling engineering 4, complexity 1; elicit engineering 3, complexity 4. Grilling's rationale, limits, and acceptance checklist live in a doc; elicit's lived in the skill text, along with line budgets asked of a renderer that does not hold them. The headless runs produced eighteen to twenty-five lines for a twenty-line screen, every run different.
+- **It modelled who the runner is.** The runner hat and the yours-or-not-yours split assumed the skill could know the person and decide for them. Reversed on 2026-09-04: the skill does not take into account who is running it, only what kind of work it is. A preset names the field, never the person. The questions the junior in the incident received that were not theirs should have been answered months before the ticket reached them; the win is to surface those questions and show plainly when one needs a larger conversation rather than a quick patch, not to withhold them.
+- **The first screen forced serial homework.** The verdict and counts on line one needed the whole picture before the first question, so every lookup finished before anything was asked. Grilling's frontier lets a sub-agent chase a fact while the rest of the round is asked, and only the dependent questions wait. Dropping the first screen made that available.
+- **Prose that said the same thing twice.** A review-prose pass on examine found about 2,300 bytes of duplicated rules, glosses, and prose describing what a template already showed. Elicit had more of the same.
+
+### What examine is
+
+Grilling's flow with this research's additions on every question. Design tree, frontier, rounds; wounds are roots, so they come first on their own with nothing announced. Each question carries why the seed does not settle it, two or three options tagged fixes or defers onto whom with a patch never a peer of a fix, the recommendation, if-wrong, to-undo, and could-help. When a question needs a team conversation the recommendation says so and drafts the line to send; money, legal, safety, and identity always take that shape. Verbs: a number, yes, share, more, settled, or plain speech. The close tallies decided, shared, and settled, gives one read out of the same four, hands over the team list with if-wrong on every bullet, offers the post, asks what next, and stops. 5,364 bytes after the verbosity pass, model-invocable on the literal word "examine" only.
+
+### Carried from elicit into examine
+
+Facts are never questions, each with its source. The refute steps that remove non-questions: settled by the record, should the cause exist. Wound as a premise the seed gets wrong or a decision it never made. Patch never a peer of a fix. The small artifact for a question that needs something to react to. "Given what you've said" on taste questions. The copy-pasteable team list with the stakes on every bullet, post only on yes. Zero questions is a success. Never build, never plan mode, never act on an answer not given. Presets, now at `plugins/alt/presets/` with developer as a file beside business and research, minus the Runner hat heading. `.agentic/sources.md` and `.agentic/alt/examine/extend-skill.md`, read if present.
+
+### Dropped, and why
+
+- The runner hat and ownership routing. Replaced by could-help, which is help, not ownership, and by the share verb, which lets the runner hand any question to the team.
+- The first screen, the verdict up front, the breadcrumb, and the gate as an object that reshapes the session. The read is tallied at the close; a question that must go to the team is a recommendation to share it.
+- Line budgets. Shapes are shown once as templates with normal-word placeholders; nothing counts lines.
+- The third consequence line, "you'd know it was wrong if." Examine carries if-wrong and to-undo. Argued for above under "Blast radius and recovery"; dropped for weight. It can return if its absence is felt in use.
+- Worked examples in templates. A payments story anchored every run toward engineering. Placeholders carry the shape.
+
+### Open decisions this settled
+
+Of the ten listed above: 1, single skill, no primitive and no passthrough, after two skills were tried and one kept. 2, examine is the one interview and `grill-me` is not a front door to it. 3, rounds, after one-at-a-time was tried in elicit. 5, recommendation with its why; no derivation, since no stances exist to derive from. 10, the runner half is rejected rather than undecided: no alt skill models who is running it. The team half stands as the sources file. Decisions 4, 6, 7, 8, and 9 remain open.

@@ -22,8 +22,9 @@ Restart Claude Code after installing. Skills will show up under `/alt:`.
 plugins/alt/                       The alt plugin
   .claude-plugin/plugin.json       Plugin manifest
   skills/<name>/SKILL.md           Skills, invoked as /alt:<name>
-    elicit/                        First real skill: the decision interview. Design in .project/design/elicit.md
-  presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: business, research. Developer is the inline default
+    examine/                       The decision interview: grilling's rounds with stakes and could-help on every question. Research in .project/research/agentic-skills/grill-me.md
+    review-prose/                  Reviews a skill or doc for verbosity and reports what could go. Changes nothing
+  presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: developer, business, research
 .claude/                           Claude Code config for working in this repo itself
 ```
 
