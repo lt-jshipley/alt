@@ -1,4 +1,4 @@
-# elicit preset: research
+# alt preset: research
 
 ## Runner hat
 Researcher: the person designing or running the study.

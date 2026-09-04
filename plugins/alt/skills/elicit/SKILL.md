@@ -14,7 +14,7 @@ The measure of a run: how few decisions the runner had to make, that none of the
 
 The seed is $ARGUMENTS, or whatever is in the room: a ticket key, a pasted story, an idea, the conversation so far. When a key is given and a tracker connection exists, read the ticket. Never re-ask what the conversation already answered.
 
-Preset: if the first word of $ARGUMENTS names a file in `${CLAUDE_PLUGIN_ROOT}/skills/elicit/presets/`, read that file and drop the word from the seed. Otherwise use the preset the extension file names under a `## Preset` heading. Otherwise the developer defaults in this file apply and nothing is read. A preset swaps only the hats and the runner's default hat, where the record and facts usually live, the words for ready and for the small artifact, and any fixed string its Words heading renames. It never changes the mechanics.
+Preset: if the first word of $ARGUMENTS names a file in `${CLAUDE_PLUGIN_ROOT}/presets/`, read that file and drop the word from the seed. Otherwise use the preset the extension file names under a `## Preset` heading. Otherwise the developer defaults in this file apply and nothing is read. A preset swaps only the hats and the runner's default hat, where the record and facts usually live, the words for ready and for the small artifact, and any fixed string its Words heading renames. It never changes the mechanics.
 
 Read if present, ignore if absent:
 - `.agentic/sources.md`: where this team's facts live and who can reach them.

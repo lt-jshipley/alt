@@ -1,4 +1,4 @@
-# elicit preset: business
+# alt preset: business
 
 ## Runner hat
 Owner: the person who owns this offer, product, or decision.

@@ -23,7 +23,7 @@ plugins/alt/                       The alt plugin
   .claude-plugin/plugin.json       Plugin manifest
   skills/<name>/SKILL.md           Skills, invoked as /alt:<name>
     elicit/                        First real skill: the decision interview. Design in .project/design/elicit.md
-      presets/                     Word and hat swaps per kind of work: business, research. Developer is the inline default
+  presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: business, research. Developer is the inline default
 .claude/                           Claude Code config for working in this repo itself
 ```
 
