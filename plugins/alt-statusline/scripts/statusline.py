@@ -9,8 +9,9 @@ session (hooks not yet fired, or the monitor not set up) it
 renders identity + git and a dim "Session: no data".
 
 Installed via setup.py, which points the statusLine setting at a stable
-launcher in the state dir; the launcher execs this file from the current
-plugin root.
+launcher in the state dir; the launcher runs this file from the plugin root
+the session started with (stamped in its ledger), falling back to the
+registry's root.
 
 Grading lives in chm_common.grade() — shared with on_prompt_submit so the
 statusline band and the injected warning can never disagree.
@@ -151,7 +152,7 @@ def git_segment(d, cache_path):
     except (OSError, json.JSONDecodeError, ValueError):
         pass
     text = build_git_segment(d)
-    chm._atomic_write(cache_path, {"dir": d, "ts": now, "text": text})
+    chm.atomic_write(cache_path, {"dir": d, "ts": now, "text": text})
     return text
 
 

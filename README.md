@@ -39,7 +39,7 @@ plugins/alt-statusline/            Session health gauge for the statusline; hook
   hooks/hooks.json                 Plugin hooks, inert until setup registers a scope
   scripts/                         Hook scripts, statusline, judge prompt, setup.py, launcher, simulate.sh
   skills/setup, skills/remove      Install and uninstall
-.claude/                           Claude Code config for working in this repo itself
+.claude/                           Reserved for Claude Code config for working in this repo itself; empty so far
 .project/research/statusline/      Research behind the gauge's context-window thresholds
 ```
 

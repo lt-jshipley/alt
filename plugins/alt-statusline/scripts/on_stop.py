@@ -4,7 +4,10 @@
 Builds the turn delta from hook payloads only (the prompt queued by
 UserPromptSubmit + last_assistant_message from Stop) — never parses the
 transcript JSONL, whose format is documented as unstable. One stateless
-model call updates topics / open loops / corrections in the ledger.
+model call updates topics / open loops / corrections in the ledger. The
+judge's instructions travel as its system prompt (--system-prompt-file) and
+it runs from the state dir, so no project CLAUDE.md, rules, or MCP config
+reach it; only the user-level ~/.claude/CLAUDE.md still loads.
 
 Concurrency. This hook runs while the next turn is already underway, and a
 fast next turn can start a second Stop before this one's judge returns, so:
@@ -48,13 +51,18 @@ JUDGE_PROMPT_PATH = os.path.join(SCRIPT_DIR, "judge_prompt.md")
 JUDGE_TIMEOUT_S = 90
 STOP_BUDGET_S = 110         # hooks.json allows 120; keep 10 for the phases
 PROMPT_SETTLE_S = 1.0
-JUDGE_WAIT_S = float(os.environ.get("CHM_JUDGE_WAIT_S", "25"))
+JUDGE_WAIT_S = chm.env_float("CHM_JUDGE_WAIT_S", 25.0)
 
 
-def call_judge(prompt_text, timeout):
+def call_judge(delta_text, timeout):
+    """One-shot `claude -p`: instructions as the system prompt, the delta on
+    stdin, run from the state dir so nothing project-level is loaded."""
+    if not os.access(JUDGE_PROMPT_PATH, os.R_OK):
+        raise RuntimeError(f"judge prompt unreadable: {JUDGE_PROMPT_PATH}")
     cmd = [
         "claude", "-p",
         "--model", os.environ.get("CHM_JUDGE_MODEL", "haiku"),
+        "--system-prompt-file", JUDGE_PROMPT_PATH,  # replaces the built-in prompt
         "--settings", '{"disableAllHooks": true}',
         "--strict-mcp-config",
         "--no-session-persistence",   # no transcript per turn under ~/.claude/projects
@@ -65,8 +73,8 @@ def call_judge(prompt_text, timeout):
         cmd += ["--effort", effort]
     env = dict(os.environ, CHM_JUDGE="1")
     out = subprocess.run(
-        cmd, input=prompt_text, capture_output=True, text=True,
-        timeout=timeout, env=env,
+        cmd, input=delta_text, capture_output=True, text=True,
+        timeout=timeout, env=env, cwd=chm.STATE_DIR,
     )
     if out.returncode != 0:
         raise RuntimeError(f"judge exit {out.returncode}: {out.stderr[:300]}")
@@ -133,7 +141,8 @@ if not chm.is_active():
 if payload.get("stop_hook_active"):
     sys.exit(0)
 
-assistant_msg = chm.get_assistant_message(payload)[:6000]
+raw_msg = chm.get_assistant_message(payload)
+assistant_msg = chm.clip_middle(raw_msg)  # head + tail: conclusions survive
 
 # --- Phase A1 --------------------------------------------------------------
 proceed = False
@@ -148,7 +157,7 @@ with chm.locked_ledger(payload) as ledger:
     else:
         # Raw per-turn stats — recorded, never graded. Material for grading a
         # session against the user's own history later.
-        stat = {"turn": turn, "msg_len": len(assistant_msg)}
+        stat = {"turn": turn, "msg_len": len(raw_msg)}
         if entry.get("ts"):
             stat["duration_s"] = round(T0 - entry["ts"])
         ledger["turn_stats"] = (ledger.get("turn_stats", []) + [stat])[-50:]
@@ -177,10 +186,7 @@ with chm.judge_lock(sid, JUDGE_WAIT_S) as acquired:
     n_loops, n_corr = len(snapshot["open_loops"]), len(snapshot["prior_corrections"])
 
     try:
-        with open(JUDGE_PROMPT_PATH) as f:
-            instructions = f.read()
-        judge_input = (
-            f"{instructions}\n\n"
+        judge_input = (  # the instructions ride along as the system prompt
             f"LEDGER:\n{json.dumps(snapshot)}\n\n"
             f"TURN DELTA:\nUSER SAID:\n{user_prompt or '(none)'}\n\n"
             f"ASSISTANT REPLIED:\n{assistant_msg or '(none)'}\n"

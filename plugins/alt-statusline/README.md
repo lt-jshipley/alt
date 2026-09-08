@@ -46,6 +46,9 @@ the plugin is already loaded.
 `/alt-statusline:remove` restores the previous `statusLine` value (or deletes
 the key if there was none), clears the registry, and keeps the session ledgers.
 
+After updating the plugin, run `/alt-statusline:setup` once more. It refreshes
+the launcher copy in the state dir and is otherwise a no-op.
+
 To keep the gauge but skip the per-turn model call in one project, set
 `CHM_NO_JUDGE` to `1` in that project's settings `env` block (see Knobs).
 
@@ -79,8 +82,10 @@ yellow = dirty; green = clean. The git segment is cached per session for 5s;
 `Session: Stable | Drifting | Degrading | Restart Recommended` — no elevated
 dimensions, one, two, or (three-plus / any Restart-capable signal). Scores are
 ordinal, not cardinal: compare a session to your other sessions, not to a magic
-threshold. The warning injection (a nudge added to your next turn) fires at
-Restart only — Degrading informs, never nags.
+threshold. The warning injection (a nudge added to your next turn) fires once
+per Restart episode and re-arms when the grade drops below Restart; compaction
+and a 3x-repeated correction never drop, so those warn once per session.
+Degrading informs, never nags.
 
 | Signal | Source | Elevates | Restart on its own |
 |---|---|---|---|
@@ -130,10 +135,12 @@ scripts/
   on_session_start.py    SessionStart hook, arg-driven by matcher: `compact`
                          counts the splice and re-injects the ledger across
                          compaction; `fresh` (startup|resume|clear|fork) runs the
-                         canary and refreshes the registry's plugin root
+                         canary and refreshes the registry's plugin root; both
+                         stamp the session's plugin root into its ledger
   statusline.py          renders the ledger; computes nothing semantic
   launcher.py            template for the stable file the statusLine setting
-                         points at (copied into the state dir by setup)
+                         points at (copied into the state dir by setup); runs
+                         statusline.py from the session's own plugin root
   setup.py               install / remove / status
   judge_prompt.md        instructions for the one-shot judge call
   simulate.sh            plumbing, gate, grading, concurrency, and setup
@@ -145,11 +152,13 @@ State lives outside the plugin, in `~/.claude/alt-statusline/`, which must be
 on a local filesystem (`flock` is unreliable on network mounts):
 
 ```
-install.json             registry: plugin root + the install record (settings
-                         file and the backed-up statusLine)
-launcher.py              what `statusLine.command` runs; execs the current
-                         plugin's statusline.py, so plugin updates need no
-                         settings change
+install.json             registry: last plugin root seen + the install record
+                         (settings file and the backed-up statusLine)
+install.json.lock        registry lock (empty; never deleted)
+launcher.py              what `statusLine.command` runs; runs statusline.py from
+                         the plugin root the session started with (its ledger),
+                         then the registry's, then the newest cached copy, so
+                         plugin updates need no settings change
 sessions/<id>.json       per-session ledger (kept; resume reuses it)
 sessions/<id>.json.lock  ledger lock (empty; never deleted)
 sessions/<id>.judge.lock serializes Stops per session (empty; never deleted)
@@ -160,10 +169,13 @@ chm.log                  debug log
 
 Why a launcher: Claude Code installs plugins into a versioned cache directory
 that changes on every update, so settings must never point into the plugin.
-The launcher reads the plugin root from the registry, which the SessionStart
-hook refreshes from `CLAUDE_PLUGIN_ROOT`; if that copy is gone it falls back to
-the newest cached version, and if nothing is found it prints one dim line and
-exits 0 rather than erroring on every render.
+The launcher reads the session id from the statusline payload and runs the
+plugin root that session started with, which the SessionStart hook stamps into
+the ledger from `CLAUDE_PLUGIN_ROOT`; a dev checkout and a marketplace install
+can run side by side, and a session keeps its version across a plugin update.
+Without a ledger it falls back to the registry's root, then to the newest
+cached version, and if nothing is found it prints one dim line and exits 0
+rather than erroring on every render.
 
 The ledger (stable keys, rankable across sessions):
 
@@ -183,14 +195,16 @@ The ledger (stable keys, rankable across sessions):
   "pending_prompts": [{ "turn": 3, "prompt": "…", "ts": 1725800000.0 }],
   "turn_stats": [{ "turn": 3, "duration_s": 42, "msg_len": 1180 }],
   "turns_graded": 0,
-  "last_warned_turn": 0,
+  "warned_red": false,
+  "plugin_root": "…",
   "judge_status": "ok",
   "schema_drift": []
 }
 ```
 
 `correction_log` entries grow a `count` when the judge flags a repeat.
-`turn_stats` (per-turn duration and reply length) is recorded but never graded.
+`turn_stats` (per-turn duration and full reply length) is recorded but never
+graded.
 `judge_status` is `pending`, `ok`, `disabled`, `skipped: …`, or `error: …`;
 only errors grade.
 
@@ -218,9 +232,13 @@ and prompts left behind by interrupted turns are dropped with a log line.
 
 The judge is a one-shot call at each turn end. It sees only the turn delta plus
 its own prior state, reasons before it answers (a `reasoning` field leads its
-JSON schema), and is instructed to report nothing when unsure. It runs with all
-hooks disabled, no tools, no session persistence, and an environment guard, so
-it can never trigger this plugin's own hooks or leave transcripts behind. It
+JSON schema), and is instructed to report nothing when unsure. The reply it
+reads is clipped to 6000 characters head and tail, so conclusions survive. Its
+instructions are its system prompt (`--system-prompt-file`) and it runs from
+the state directory, so no project CLAUDE.md, rules, or MCP config reach it;
+only the user-level `~/.claude/CLAUDE.md` still loads. It runs with all hooks
+disabled, no tools, no session persistence, and an environment guard, so it
+can never trigger this plugin's own hooks or leave transcripts behind. It
 degrades gracefully: with no usable model call, the judge chip shows the error
 and the deterministic counters keep working.
 
@@ -243,7 +261,9 @@ cd <some repo> && claude --plugin-dir /path/to/alt/plugins/alt-statusline
 
 Take two or three turns, including one typed while Claude is still working.
 The gauge row should show no `judge:` chip and a `Topics:` row should appear.
-Then `/alt-statusline:remove`.
+Then `/alt-statusline:remove`. This is also the check after a Claude Code
+upgrade: the judge relies on `--system-prompt-file`, which `claude --help`
+does not list.
 
 ## Schema independence
 
@@ -259,9 +279,9 @@ counting never stops; the statusline never displays that ledger.
 
 ## Knobs & cost
 
-The judge costs one Haiku call per turn end (roughly 8k prompt tokens with the
-turn delta), in every session. Env knobs, settable per project in that
-project's settings `env` block:
+The judge costs one Haiku call per turn end (about 2k prompt tokens: its own
+instructions plus the turn delta, measured at 1.7k), in every session. Env
+knobs, settable per project in that project's settings `env` block:
 
 - `CHM_NO_JUDGE=1` — counters only, zero model calls (topics/loops/corrections
   stop updating)
@@ -283,6 +303,8 @@ per-project knob: the launcher pins the state dir setup installed into.
 - A turn that completes in under a second leaves its prompt for the next Stop,
   which drops it as an orphan; that reply is graded without its prompt.
 - Sessions whose payloads can't provide an id share the `current.json` ledger.
+- The judge no longer sees project files, but the user-level `~/.claude/CLAUDE.md`
+  still loads into it.
 - Grades are ordinal — meaningful against your own sessions, not as absolutes.
 - Ledgers and lock files are kept indefinitely; there is no pruning yet.
 - macOS and Linux only: the locks use `flock`, and `python3` must be on PATH

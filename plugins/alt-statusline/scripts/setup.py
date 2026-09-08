@@ -146,18 +146,15 @@ def preflight(path, plugin_root):
 
     # The launcher is refreshed on every install so fixes ship with updates,
     # and the registry learns the plugin root before the smoke test so the
-    # launcher execs the real statusline rather than its not-found fallback.
+    # launcher runs the real statusline rather than its not-found fallback.
     try:
         shutil.copyfile(LAUNCHER_SRC, chm.LAUNCHER_PATH)
     except OSError as e:
         fail(f"cannot write launcher {chm.LAUNCHER_PATH}: {e}")
-    reg = chm.load_registry()
-    if reg.get("plugin_root") != plugin_root:
-        reg["plugin_root"] = plugin_root
-        try:
-            atomic_json(chm.REGISTRY_PATH, reg)
-        except OSError as e:
-            fail(f"cannot write registry {chm.REGISTRY_PATH}: {e}")
+    try:
+        reg = chm.update_registry(lambda r: r.__setitem__("plugin_root", plugin_root))
+    except OSError as e:
+        fail(f"cannot write registry {chm.REGISTRY_PATH}: {e}")
     try:
         r = subprocess.run([sys.executable, chm.LAUNCHER_PATH], input="{}",
                            capture_output=True, text=True, timeout=20,
@@ -227,9 +224,8 @@ def cmd_install(args):
     new_data["statusLine"] = ours
     write_settings(path, new_data, mtime)
 
-    reg["user"] = entry
     try:
-        atomic_json(chm.REGISTRY_PATH, reg)
+        chm.update_registry(lambda r: r.__setitem__("user", entry))
     except OSError as e:
         write_settings(path, data, None)  # roll back
         fail(f"could not write registry {chm.REGISTRY_PATH}: {e}; "
@@ -266,9 +262,8 @@ def cmd_remove(_args):
         write_settings(path, new_data, mtime)
         print(f"{what} in {path}")
 
-    reg.pop("user", None)
     try:
-        atomic_json(chm.REGISTRY_PATH, reg)
+        chm.update_registry(lambda r: r.pop("user", None))
     except OSError as e:
         fail(f"settings restored but the registry {chm.REGISTRY_PATH} could not be "
              f"updated: {e}; hooks stay active until it is fixed")

@@ -11,10 +11,13 @@ fires is one cycle behind; its loops appear on the next turn's ledger, not in
 this injection.
 
 fresh: fires on startup|resume|clear|fork. Loads (never resets) the session
-ledger, runs the environment canary (claude on PATH, judge prompt readable,
-state writable), and refreshes the registry's plugin_root from
-CLAUDE_PLUGIN_ROOT so the statusline launcher follows plugin updates.
+ledger, runs the environment canary (claude on PATH unless CHM_NO_JUDGE=1,
+judge prompt readable, state writable), and refreshes the registry's
+plugin_root from CLAUDE_PLUGIN_ROOT (the launcher's fallback root).
 Prints NOTHING — stdout would be injected into the session.
+
+Both modes stamp CLAUDE_PLUGIN_ROOT into the ledger as plugin_root, so the
+launcher renders this session with the plugin version it started with.
 """
 
 import os
@@ -37,8 +40,12 @@ payload = chm.read_hook_payload()
 if not chm.is_active():
     sys.exit(0)  # not set up: stay inert
 
+root = os.environ.get("CLAUDE_PLUGIN_ROOT")
+
 if mode == "compact":
     with chm.locked_ledger(payload) as ledger:
+        if root:
+            ledger["plugin_root"] = root
         ledger["counters"]["compactions"] += 1
         loops = "; ".join(l["desc"] for l in ledger["open_loops"]) or "none"
         topics = ", ".join(ledger["topics"]) or "none"
@@ -51,16 +58,22 @@ if mode == "compact":
         "open loop above as unresolved unless it was explicitly closed."
     )
 else:
-    root = os.environ.get("CLAUDE_PLUGIN_ROOT")
     if root:
-        reg = chm.load_registry()
-        if reg.get("plugin_root") != root:
+        seen = {}
+
+        def _refresh(reg):
+            seen["was"] = reg.get("plugin_root")
             reg["plugin_root"] = root
-            chm.save_registry(reg)
-            chm.log(f"plugin_root refreshed: {root}")
+
+        try:
+            chm.update_registry(_refresh)
+            if seen.get("was") != root:
+                chm.log(f"plugin_root refreshed: {root}")
+        except OSError as e:
+            chm.log(f"registry refresh failed: {e}")
     problems = []
-    if not shutil.which("claude"):
-        problems.append("claude not on PATH")
+    if os.environ.get("CHM_NO_JUDGE") != "1" and not shutil.which("claude"):
+        problems.append("claude not on PATH")  # counters-only mode needs no judge
     if not os.access(os.path.join(SCRIPT_DIR, "judge_prompt.md"), os.R_OK):
         problems.append("judge_prompt.md unreadable")
     try:
@@ -70,8 +83,12 @@ else:
     if not os.access(chm.SESSIONS_DIR, os.W_OK):
         problems.append("state dir not writable")
     with chm.locked_ledger(payload) as ledger:
+        if root:
+            ledger["plugin_root"] = root
         if problems:
             ledger["judge_status"] = f"error: canary: {'; '.join(problems)}"[:150]
             chm.log(f"[{ledger['session_id'][:8]}] canary FAILED: {problems}")
         else:
+            if str(ledger.get("judge_status", "")).startswith("error: canary"):
+                ledger["judge_status"] = "pending"  # environment fixed since
             chm.log(f"[{ledger['session_id'][:8]}] session start, canary ok")

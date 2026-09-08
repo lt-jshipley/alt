@@ -9,7 +9,8 @@ Concurrency: hooks are separate processes and several run at once (parallel
 tool calls; the async Stop hook overlapping the next turn). Every ledger
 mutation goes through locked_ledger(), an exclusive flock around the whole
 read-modify-write; the Stop pipeline is additionally serialized per session by
-judge_lock(). Ledger files are written atomically (tmp + rename) so the
+judge_lock(); registry writes go through update_registry(), locked the same
+way. Ledger files are written atomically (tmp + rename) so the
 statusline, which only reads, needs no lock. flock is advisory and unreliable
 on network filesystems; the state dir must be local.
 
@@ -61,19 +62,26 @@ def read_hook_payload():
         return {}
 
 
-def _atomic_write(path, data):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path))
+def atomic_write(path, data, strict=False):
+    """tmp + rename. Logs and swallows OSError by default — hooks must never
+    crash the session. strict=True re-raises after logging, for callers whose
+    guarantees depend on seeing the failure (setup's settings rollback)."""
+    tmp = None
     try:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path))
         with os.fdopen(fd, "w") as f:
             json.dump(data, f, indent=2)
         os.replace(tmp, path)
     except OSError as e:
         log(f"write failed {path}: {e}")
-        try:
-            os.unlink(tmp)
-        except OSError:
-            pass
+        if tmp:
+            try:
+                os.unlink(tmp)
+            except OSError:
+                pass
+        if strict:
+            raise
 
 
 # ---------------------------------------------------------------------------
@@ -82,9 +90,12 @@ def _atomic_write(path, data):
 # setup.py writes install.json when the user installs the statusline; remove
 # deletes the entry. Hooks read it on every event and exit at once when it is
 # absent, so an installed-but-not-set-up plugin grades nothing, calls no
-# model, and injects nothing.
+# model, and injects nothing. Every write goes through update_registry(),
+# which holds install.json.lock: setup and a starting session's plugin_root
+# refresh must never interleave, or the install record gets dropped.
 #
-#   {"plugin_root": "...",                       refreshed by SessionStart
+#   {"plugin_root": "...",                       last seen by SessionStart;
+#                                                the launcher's fallback root
 #    "user": {settings_file, had_previous, previous_statusline, installed_at}}
 # ---------------------------------------------------------------------------
 
@@ -98,8 +109,21 @@ def load_registry():
         return {}
 
 
-def save_registry(reg):
-    _atomic_write(REGISTRY_PATH, reg)
+def update_registry(mutator):
+    """Locked read-modify-write of install.json. mutator(reg) edits the dict
+    in place; the file is rewritten only if it changed. Raises OSError on a
+    failed write — setup must know; hooks catch and log."""
+    fd = _lock_fd(REGISTRY_PATH + ".lock")
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        reg = load_registry()
+        before = json.dumps(reg, sort_keys=True)
+        mutator(reg)
+        if json.dumps(reg, sort_keys=True) != before:
+            atomic_write(REGISTRY_PATH, reg, strict=True)
+        return reg
+    finally:
+        os.close(fd)
 
 
 def is_active():
@@ -127,6 +151,9 @@ def _empty_ledger(session_id):
         "turns_graded": 0,
         "judge_status": "pending",  # pending | ok | disabled | skipped: ... | error: ...
         "schema_drift": [],         # payload fields expected but missing
+        "warned_red": False,        # red warning fired this episode; cleared below red
+        "plugin_root": None,        # CLAUDE_PLUGIN_ROOT at SessionStart; the launcher
+                                    # renders this session with that plugin version
     }
 
 
@@ -144,7 +171,7 @@ def load_ledger(session_id):
 
 def save_ledger(ledger):
     ledger["updated_at"] = _now()
-    _atomic_write(ledger_path(ledger["session_id"]), ledger)
+    atomic_write(ledger_path(ledger["session_id"]), ledger)
 
 
 def _lock_fd(path):
@@ -240,11 +267,13 @@ ELEV_FAIL_BURST_SECS = 120 #    inside this window. Bursts are often
                            #    reason total, never red on its own
 ELEV_CORRECTIONS = 2       # the "corrected twice -> /clear" heuristic
 RED_CORRECTION_REPEAT = 3  # same issue corrected 3+ times: red-capable
-ELEV_CTX_PCT = 25          # one elevation. User-calibrated: standing overhead
-RED_CTX_PCT = 40           # (system prompt, CLAUDE.md, skills) alone can hit
-                           # ~13% before work begins, so absolute-token rules
-                           # mislead. 40%+ counts as TWO elevations — red on
-                           # its own under the 2+ rule.
+ELEV_CTX_PCT = 25          # fractions of the model's window, straight from
+RED_CTX_PCT = 40           # Claude Code's used_percentage (250k / 400k on a
+                           # 1M window). 25%+ is one elevation; 40%+ is
+                           # red-capable on its own. Window-relative on
+                           # purpose: standing overhead (system prompt,
+                           # CLAUDE.md, skills) alone can hit ~13% before work
+                           # begins, so absolute-token rules mislead.
 
 
 def ctx_path(session_id):
@@ -263,7 +292,7 @@ def load_ctx(session_id):
 
 
 def save_ctx(session_id, pct, tokens):
-    _atomic_write(ctx_path(session_id), {"pct": pct, "tokens": tokens})
+    atomic_write(ctx_path(session_id), {"pct": pct, "tokens": tokens})
 
 
 def stale_open_loops(ledger):
@@ -408,3 +437,35 @@ def record_topics(ledger, topic_names):
             ledger["topics"].append(name)
         counts = ledger.setdefault("topic_counts", {})  # per-session mentions
         counts[name] = counts.get(name, 0) + 1
+
+
+# ---------------------------------------------------------------------------
+# Small shared helpers.
+# ---------------------------------------------------------------------------
+
+MSG_CLIP = 6000           # chars of the assistant reply the judge sees
+
+
+def clip_middle(text, budget=MSG_CLIP):
+    """Head + tail within budget, an elision marker between. The tail carries
+    a reply's conclusions — what loop closures and corrections hinge on — so
+    head-only truncation made the judge under-close loops."""
+    if len(text) <= budget:
+        return text
+    marker = f"\n[... ~{len(text) - budget} chars elided ...]\n"
+    keep = max(budget - len(marker), 0)
+    head = keep // 2
+    return text[:head] + marker + text[len(text) - (keep - head):]
+
+
+def env_float(name, default):
+    """Numeric env knob; a malformed value logs and falls back rather than
+    crashing the hook at import."""
+    raw = os.environ.get(name)
+    if not raw:
+        return default
+    try:
+        return float(raw)
+    except ValueError:
+        log(f"bad {name}={raw!r}; using {default}")
+        return default

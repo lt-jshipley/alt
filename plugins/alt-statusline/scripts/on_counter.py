@@ -22,7 +22,7 @@ if os.environ.get("CHM_JUDGE") == "1":
 
 import chm_common as chm
 
-VALID = {"tool_calls", "tool_failures", "compactions"}
+VALID = {"tool_calls", "tool_failures"}
 counter = sys.argv[1] if len(sys.argv) > 1 else ""
 if counter not in VALID:
     chm.log(f"on_counter: bad counter arg {counter!r}")

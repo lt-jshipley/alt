@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """UserPromptSubmit hook: stamp the turn, queue the prompt for the judge's
-turn delta, and inject a health warning into the turn ONLY when the ledger
-looks anomalous.
+turn delta, and inject a health warning into the turn once per red episode.
 
 Anything printed to stdout on exit 0 becomes context, so this script is
 silent unless it is deliberately injecting — and it prints only after the
@@ -18,8 +17,6 @@ if os.environ.get("CHM_JUDGE") == "1":
     sys.exit(0)
 
 import chm_common as chm
-
-WARN_COOLDOWN_TURNS = 10
 
 payload = chm.read_hook_payload()
 if not chm.is_active():
@@ -39,17 +36,21 @@ with chm.locked_ledger(payload) as ledger:
     ledger["pending_prompts"] = pending[-chm.PENDING_PROMPTS_CAP:]
 
     level, reasons, _flags = chm.grade(ledger, chm.load_ctx(ledger["session_id"]))
-    recently_warned = (ledger["turn"] - ledger.get("last_warned_turn", -999)
-                       < WARN_COOLDOWN_TURNS)
-    if level == "restart" and not recently_warned:
-        ledger["last_warned_turn"] = ledger["turn"]
-        injection = (
-            "[context-health] This session shows signs of context clutter: "
-            + "; ".join(reasons)
-            + ". Briefly surface this to the user and suggest either explicitly "
-            "closing dead ends or restarting from durable artifacts (/clear) at "
-            "the next natural boundary. Then answer their prompt normally."
-        )
+    # One nudge per red episode; the label carries it from then on. Re-armed
+    # when the grade drops below red (loops close, context shrinks). Compaction
+    # and a 3x-repeated correction never drop, so those warn once per session.
+    if level == "restart":
+        if not ledger.get("warned_red"):
+            ledger["warned_red"] = True
+            injection = (
+                "[context-health] This session shows signs of context clutter: "
+                + "; ".join(reasons)
+                + ". Briefly surface this to the user and suggest either explicitly "
+                "closing dead ends or restarting from durable artifacts (/clear) at "
+                "the next natural boundary. Then answer their prompt normally."
+            )
+    else:
+        ledger["warned_red"] = False
 
 if injection:
     print(json.dumps({
