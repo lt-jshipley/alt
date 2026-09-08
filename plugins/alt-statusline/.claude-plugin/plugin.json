@@ -1,0 +1,14 @@
+{
+  "name": "alt-statusline",
+  "displayName": "alt-statusline",
+  "version": "0.1.0",
+  "description": "Session health gauge for the Claude Code statusline: topic drift, open loops, tool failures, corrections, compactions, and context use, graded per session. Does nothing until /alt-statusline:setup is run.",
+  "author": {
+    "name": "Lean Techniques",
+    "email": "jshipley@leantechniques.com"
+  },
+  "homepage": "https://github.com/lt-jshipley/alt",
+  "repository": "https://github.com/lt-jshipley/alt",
+  "license": "MIT",
+  "keywords": ["statusline", "hooks", "context", "session-health"]
+}

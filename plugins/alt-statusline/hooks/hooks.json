@@ -1,0 +1,75 @@
+{
+  "description": "alt-statusline: counts tool calls and failures, captures each turn for the one-shot judge, tracks compactions, and injects a restart warning at red. Every hook is inert until /alt-statusline:setup has registered this user or folder.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/on_counter.py\" tool_calls",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/on_counter.py\" tool_failures",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/on_prompt_submit.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/on_stop.py\"",
+            "timeout": 120,
+            "async": true,
+            "statusMessage": "Grading context health..."
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/on_session_start.py\" compact",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "startup|resume|clear|fork",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/on_session_start.py\" fresh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

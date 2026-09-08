@@ -2,7 +2,7 @@
 
 Agentic Lean Techniques. Claude Code workflows collected from client engagements: skills, commands, agents, and hooks that have proven useful more than once.
 
-This repo is a Claude Code plugin marketplace named `agenticleantechniques`. It currently publishes one plugin, `alt`, whose skills appear as `/alt:<skill>`.
+This repo is a Claude Code plugin marketplace named `agenticleantechniques`. It publishes two plugins: `alt`, whose skills appear as `/alt:<skill>`, and `alt-statusline`, a session health gauge for the statusline that stays inert until you run its setup skill.
 
 ## Install
 
@@ -15,6 +15,16 @@ Add the marketplace once, then install the plugin:
 
 Restart Claude Code after installing. Skills will show up under `/alt:`.
 
+For the statusline gauge, install it separately, reload, then choose where it runs:
+
+```
+/plugin install alt-statusline@agenticleantechniques
+/reload-plugins
+/alt-statusline:setup        (asks: user scope or this folder)
+```
+
+Nothing is graded and no statusline changes until `setup` runs; `/alt-statusline:remove` puts things back. Details in `plugins/alt-statusline/README.md`.
+
 ## Layout
 
 ```
@@ -25,7 +35,12 @@ plugins/alt/                       The alt plugin
     examine/                       The decision interview: grilling's rounds with stakes and could-help on every question. Research in .project/research/agentic-skills/grill-me.md
     review-prose/                  Reviews a skill or doc for verbosity and reports what could go. Changes nothing
   presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: developer, business, research
+plugins/alt-statusline/            Session health gauge for the statusline; hooks + judge + statusline, gated behind /alt-statusline:setup
+  hooks/hooks.json                 Plugin hooks, inert until setup registers a scope
+  scripts/                         Hook scripts, statusline, judge prompt, setup.py, launcher, simulate.sh
+  skills/setup, skills/remove      Install and uninstall, user or folder scope
 .claude/                           Claude Code config for working in this repo itself
+.project/research/statusline/      Research behind the gauge's context-window thresholds
 ```
 
 Add `agents/`, `commands/`, or `hooks/hooks.json` under `plugins/alt/` as those are needed.
@@ -35,6 +50,8 @@ Add `agents/`, `commands/`, or `hooks/hooks.json` under `plugins/alt/` as those 
 ```
 claude plugin validate . --strict
 claude plugin validate plugins/alt --strict
+claude plugin validate plugins/alt-statusline --strict
+bash plugins/alt-statusline/scripts/simulate.sh
 ```
 
 ## License
