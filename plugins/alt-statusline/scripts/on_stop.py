@@ -1,15 +1,32 @@
 #!/usr/bin/env python3
 """Stop hook (registered async): the incremental judge.
 
-Builds the turn delta from hook payloads only (last user prompt captured by
+Builds the turn delta from hook payloads only (the prompt queued by
 UserPromptSubmit + last_assistant_message from Stop) — never parses the
 transcript JSONL, whose format is documented as unstable. One stateless
 model call updates topics / open loops / corrections in the ledger.
+
+Concurrency. This hook runs while the next turn is already underway, and a
+fast next turn can start a second Stop before this one's judge returns, so:
+  Phase A1  (ledger lock, ms)  consume the prompt, record turn stats
+  judge lock                   serialize Stops per session; skip if busy
+  Phase A2  (ledger lock, ms)  snapshot the judge's input
+  judge     (no locks, <=90s)  the model call
+  Phase B   (ledger lock, ms)  reload and apply the verdict by index
+Only Stops write the judge-owned fields, and Stops are serialized, so the
+snapshot is exactly what Phase B sees and the judge's indices stay valid.
+
+Prompt attribution. pending_prompts is a queue, consumed by timestamp: a
+prompt stamped within PROMPT_SETTLE_S of this process starting is the NEXT
+turn's (queued input whose UserPromptSubmit won the startup race) and is left
+alone; among older entries the newest is ours and any before it belong to
+interrupted turns (Stop never fired) and are dropped with a log line.
 
 Env:
   CHM_NO_JUDGE=1       skip the model call (counters-only mode)
   CHM_JUDGE_MODEL      model alias for the call (default: haiku)
   CHM_JUDGE_EFFORT     optional --effort level (low|medium|high|xhigh|max)
+  CHM_JUDGE_WAIT_S     seconds to wait for a running judge (default 25)
 """
 
 import json
@@ -17,6 +34,8 @@ import os
 import subprocess
 import sys
 import time
+
+T0 = time.time()  # before anything else: prompt attribution keys off it
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 if os.environ.get("CHM_JUDGE") == "1":
@@ -26,14 +45,20 @@ import chm_common as chm
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 JUDGE_PROMPT_PATH = os.path.join(SCRIPT_DIR, "judge_prompt.md")
+JUDGE_TIMEOUT_S = 90
+STOP_BUDGET_S = 110         # hooks.json allows 120; keep 10 for the phases
+PROMPT_SETTLE_S = 1.0
+JUDGE_WAIT_S = float(os.environ.get("CHM_JUDGE_WAIT_S", "25"))
 
 
-def call_judge(prompt_text):
+def call_judge(prompt_text, timeout):
     cmd = [
         "claude", "-p",
         "--model", os.environ.get("CHM_JUDGE_MODEL", "haiku"),
         "--settings", '{"disableAllHooks": true}',
         "--strict-mcp-config",
+        "--no-session-persistence",   # no transcript per turn under ~/.claude/projects
+        "--tools", "",                # the judge reads a document; it needs no tools
     ]
     effort = os.environ.get("CHM_JUDGE_EFFORT")
     if effort:
@@ -41,7 +66,7 @@ def call_judge(prompt_text):
     env = dict(os.environ, CHM_JUDGE="1")
     out = subprocess.run(
         cmd, input=prompt_text, capture_output=True, text=True,
-        timeout=90, env=env,
+        timeout=timeout, env=env,
     )
     if out.returncode != 0:
         raise RuntimeError(f"judge exit {out.returncode}: {out.stderr[:300]}")
@@ -55,79 +80,119 @@ def parse_judge_json(raw):
     return json.loads(raw[start:end + 1])
 
 
-payload = chm.read_hook_payload()
-if not chm.is_active(payload):
-    sys.exit(0)  # not set up for this user or folder: stay inert
-if payload.get("stop_hook_active"):
-    sys.exit(0)
+def consume_prompt(ledger):
+    """Phase A1: pop the prompt this Stop closes out (see module docstring)."""
+    pending = ledger.get("pending_prompts") or []
+    cutoff = T0 - PROMPT_SETTLE_S
+    ours = [p for p in pending if p.get("ts", 0) < cutoff]
+    ledger["pending_prompts"] = [p for p in pending if p.get("ts", 0) >= cutoff]
+    for orphan in ours[:-1]:
+        chm.log(f"[{ledger['session_id'][:8]}] dropping unconsumed prompt from "
+                f"turn {orphan.get('turn')} (interrupted turn?)")
+    return ours[-1] if ours else None
 
-ledger = chm.resolve_ledger(payload)
-sid = ledger["session_id"]
-user_prompt = ledger.pop("pending_user_prompt", "")
-assistant_msg = chm.get_assistant_message(payload)[:6000]
 
-if not user_prompt and not assistant_msg:
-    if payload:
-        chm.note_drift(ledger, "last_assistant_message")
-    chm.save_ledger(ledger)
-    sys.exit(0)
+def _is_index(i, n):
+    return isinstance(i, int) and not isinstance(i, bool) and 0 <= i < n
 
-# Raw per-turn stats — recorded, never graded. Material for grading a session
-# against the user's own history later.
-prompt_ts = ledger.pop("pending_prompt_ts", None)
-stat = {"turn": ledger.get("turn", 0), "msg_len": len(assistant_msg)}
-if prompt_ts:
-    stat["duration_s"] = round(time.time() - prompt_ts)
-ledger["turn_stats"] = (ledger.get("turn_stats", []) + [stat])[-50:]
 
-if os.environ.get("CHM_NO_JUDGE") == "1":
-    ledger["judge_status"] = "disabled"
-    chm.save_ledger(ledger)
-    sys.exit(0)
-
-try:
-    with open(JUDGE_PROMPT_PATH) as f:
-        instructions = f.read()
-    open_loops = [l["desc"] for l in ledger["open_loops"]]
-    prior_corrections = [e["desc"] for e in ledger.get("correction_log", [])]
-    judge_input = (
-        f"{instructions}\n\n"
-        f"LEDGER:\n{json.dumps({'topics': ledger['topics'], 'open_loops': open_loops, 'prior_corrections': prior_corrections})}\n\n"
-        f"TURN DELTA:\nUSER SAID:\n{user_prompt or '(none)'}\n\n"
-        f"ASSISTANT REPLIED:\n{assistant_msg or '(none)'}\n"
-    )
-    verdict = parse_judge_json(call_judge(judge_input))
-
+def apply_verdict(ledger, verdict, turn, n_loops, n_corr):
+    """Phase B. Indices refer to the Phase A2 snapshot, which — Stops being
+    serialized — is the first n_loops / n_corr entries of the fresh lists.
+    Close before opening so an index can never hit a loop opened by this
+    same verdict."""
     chm.record_topics(ledger, verdict.get("topics") or [])
-    for desc in (verdict.get("opened_loops") or [])[:5]:
-        ledger["open_loops"].append(
-            {"desc": str(desc)[:200], "opened_turn": ledger.get("turn", 0)})
-    closed = sorted(
-        {i for i in (verdict.get("closed_loops") or [])
-         if isinstance(i, int) and 0 <= i < len(ledger["open_loops"])},
-        reverse=True)
+    closed = sorted({i for i in (verdict.get("closed_loops") or [])
+                     if _is_index(i, n_loops)}, reverse=True)
     for i in closed:
-        ledger["open_loops"].pop(i)
-        ledger["closed_loops"] += 1
+        if i < len(ledger["open_loops"]):
+            ledger["open_loops"].pop(i)
+            ledger["closed_loops"] += 1
+    for desc in (verdict.get("opened_loops") or [])[:5]:
+        ledger["open_loops"].append({"desc": str(desc)[:200], "opened_turn": turn})
     corrections = verdict.get("corrections") or []
-    if isinstance(corrections, int):  # pre-repeat judge schema: bare count
-        ledger["corrections"] += max(corrections, 0)
+    if isinstance(corrections, int) and not isinstance(corrections, bool):
+        ledger["corrections"] += max(corrections, 0)  # pre-repeat judge schema
     else:
         clog = ledger.get("correction_log", [])
-        for item in corrections[:5]:
+        for item in list(corrections)[:5]:
             if not isinstance(item, dict):
                 continue
             rep = item.get("repeat_of")
-            if isinstance(rep, int) and 0 <= rep < len(clog):
+            if _is_index(rep, n_corr) and rep < len(clog):
                 clog[rep]["count"] = clog[rep].get("count", 1) + 1
             else:
                 clog.append({"desc": str(item.get("desc", ""))[:200], "count": 1})
             ledger["corrections"] += 1
         ledger["correction_log"] = clog[-10:]
-    ledger["judge_status"] = "ok"
-    ledger["turns_graded"] += 1
-except Exception as e:  # a broken judge must never break the session
-    ledger["judge_status"] = f"error: {str(e)[:120]}"
-    chm.log(f"[{sid[:8]}] judge failed: {e}")
 
-chm.save_ledger(ledger)
+
+payload = chm.read_hook_payload()
+if not chm.is_active():
+    sys.exit(0)  # not set up: stay inert
+if payload.get("stop_hook_active"):
+    sys.exit(0)
+
+assistant_msg = chm.get_assistant_message(payload)[:6000]
+
+# --- Phase A1 --------------------------------------------------------------
+proceed = False
+with chm.locked_ledger(payload) as ledger:
+    sid = ledger["session_id"]
+    entry = consume_prompt(ledger) or {}
+    user_prompt = entry.get("prompt", "")
+    turn = entry.get("turn", ledger.get("turn", 0))
+    if not user_prompt and not assistant_msg:
+        if payload:
+            chm.note_drift(ledger, "last_assistant_message")
+    else:
+        # Raw per-turn stats — recorded, never graded. Material for grading a
+        # session against the user's own history later.
+        stat = {"turn": turn, "msg_len": len(assistant_msg)}
+        if entry.get("ts"):
+            stat["duration_s"] = round(T0 - entry["ts"])
+        ledger["turn_stats"] = (ledger.get("turn_stats", []) + [stat])[-50:]
+        if os.environ.get("CHM_NO_JUDGE") == "1":
+            ledger["judge_status"] = "disabled"
+        else:
+            proceed = True
+if not proceed:
+    sys.exit(0)
+
+# --- judge lock, Phase A2, judge, Phase B -----------------------------------
+with chm.judge_lock(sid, JUDGE_WAIT_S) as acquired:
+    if not acquired:
+        with chm.locked_ledger(payload) as ledger:
+            ledger["judge_status"] = "skipped: busy"
+        chm.log(f"[{sid[:8]}] judge still running after {JUDGE_WAIT_S:g}s; "
+                f"turn {turn} not graded")
+        sys.exit(0)
+
+    with chm.locked_ledger(payload) as ledger:
+        snapshot = {
+            "topics": list(ledger["topics"]),
+            "open_loops": [l["desc"] for l in ledger["open_loops"]],
+            "prior_corrections": [e["desc"] for e in ledger.get("correction_log", [])],
+        }
+    n_loops, n_corr = len(snapshot["open_loops"]), len(snapshot["prior_corrections"])
+
+    try:
+        with open(JUDGE_PROMPT_PATH) as f:
+            instructions = f.read()
+        judge_input = (
+            f"{instructions}\n\n"
+            f"LEDGER:\n{json.dumps(snapshot)}\n\n"
+            f"TURN DELTA:\nUSER SAID:\n{user_prompt or '(none)'}\n\n"
+            f"ASSISTANT REPLIED:\n{assistant_msg or '(none)'}\n"
+        )
+        remaining = STOP_BUDGET_S - (time.time() - T0)
+        verdict = parse_judge_json(
+            call_judge(judge_input, timeout=max(5, min(JUDGE_TIMEOUT_S, remaining))))
+        with chm.locked_ledger(payload) as ledger:
+            apply_verdict(ledger, verdict, turn, n_loops, n_corr)
+            ledger["judge_status"] = "ok"
+            ledger["turns_graded"] += 1
+    except Exception as e:  # a broken judge must never break the session
+        with chm.locked_ledger(payload) as ledger:
+            ledger["judge_status"] = f"error: {str(e)[:120]}"
+        chm.log(f"[{sid[:8]}] judge failed: {e}")

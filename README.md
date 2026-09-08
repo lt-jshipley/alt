@@ -15,12 +15,12 @@ Add the marketplace once, then install the plugin:
 
 Restart Claude Code after installing. Skills will show up under `/alt:`.
 
-For the statusline gauge, install it separately, reload, then choose where it runs:
+For the statusline gauge, install it separately, reload, then run setup:
 
 ```
 /plugin install alt-statusline@agentic-leantechniques
 /reload-plugins
-/alt-statusline:setup        (asks: user scope or this folder)
+/alt-statusline:setup
 ```
 
 Nothing is graded and no statusline changes until `setup` runs; `/alt-statusline:remove` puts things back. Details in `plugins/alt-statusline/README.md`.
@@ -38,7 +38,7 @@ plugins/alt/                       The alt plugin
 plugins/alt-statusline/            Session health gauge for the statusline; hooks + judge + statusline, gated behind /alt-statusline:setup
   hooks/hooks.json                 Plugin hooks, inert until setup registers a scope
   scripts/                         Hook scripts, statusline, judge prompt, setup.py, launcher, simulate.sh
-  skills/setup, skills/remove      Install and uninstall, user or folder scope
+  skills/setup, skills/remove      Install and uninstall
 .claude/                           Claude Code config for working in this repo itself
 .project/research/statusline/      Research behind the gauge's context-window thresholds
 ```

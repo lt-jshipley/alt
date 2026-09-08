@@ -1,5 +1,5 @@
 {
-  "description": "alt-statusline: counts tool calls and failures, captures each turn for the one-shot judge, tracks compactions, and injects a restart warning at red. Every hook is inert until /alt-statusline:setup has registered this user or folder.",
+  "description": "alt-statusline: counts tool calls and failures, captures each turn for the one-shot judge, tracks compactions, and injects a restart warning at red. Every hook is inert until /alt-statusline:setup has installed it for this user.",
   "hooks": {
     "PostToolUse": [
       {

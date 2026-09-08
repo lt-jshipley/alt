@@ -3,18 +3,28 @@
 All hook scripts and the statusline import this. State lives in files under
 STATE_DIR (default ~/.claude/alt-statusline, override with CHM_STATE_DIR) —
 the monitor has no resident process, so this module IS the runtime between
-events. Writes are atomic (tmp + rename) because hooks can fire while the
-statusline is reading.
+events.
+
+Concurrency: hooks are separate processes and several run at once (parallel
+tool calls; the async Stop hook overlapping the next turn). Every ledger
+mutation goes through locked_ledger(), an exclusive flock around the whole
+read-modify-write; the Stop pipeline is additionally serialized per session by
+judge_lock(). Ledger files are written atomically (tmp + rename) so the
+statusline, which only reads, needs no lock. flock is advisory and unreliable
+on network filesystems; the state dir must be local.
 
 Activation: hooks are inert until `setup.py install` writes install.json (the
-registry) for the user or for the folder a session was launched in.
-is_active() is the gate every hook passes through before touching a ledger.
+registry) for this user. is_active() is the gate every hook passes through
+before touching a ledger.
 """
 
+import fcntl
 import json
 import os
 import sys
 import tempfile
+import time
+from contextlib import contextmanager
 from datetime import datetime, timezone
 
 STATE_DIR = os.environ.get("CHM_STATE_DIR") or os.path.expanduser("~/.claude/alt-statusline")
@@ -22,6 +32,9 @@ SESSIONS_DIR = os.path.join(STATE_DIR, "sessions")
 LOG_PATH = os.path.join(STATE_DIR, "chm.log")
 REGISTRY_PATH = os.path.join(STATE_DIR, "install.json")
 LAUNCHER_PATH = os.path.join(STATE_DIR, "launcher.py")  # what statusLine points at
+
+PENDING_PROMPTS_CAP = 5   # unconsumed prompts kept per session (interrupted turns)
+LOCK_POLL_S = 0.25        # judge_lock retry interval
 
 
 def _now():
@@ -66,18 +79,17 @@ def _atomic_write(path, data):
 # ---------------------------------------------------------------------------
 # Registry / activation gate.
 #
-# setup.py writes install.json when the user installs the statusline at user
-# scope or for one folder; remove deletes the entry. Hooks read it on every
-# event and exit at once when nothing applies, so an installed-but-not-set-up
-# plugin grades nothing, calls no model, and injects nothing.
+# setup.py writes install.json when the user installs the statusline; remove
+# deletes the entry. Hooks read it on every event and exit at once when it is
+# absent, so an installed-but-not-set-up plugin grades nothing, calls no
+# model, and injects nothing.
 #
 #   {"plugin_root": "...",                       refreshed by SessionStart
-#    "user":    {settings_file, had_previous, previous_statusline, installed_at},
-#    "folders": {"/abs/repo/root": {same fields}}}
+#    "user": {settings_file, had_previous, previous_statusline, installed_at}}
 # ---------------------------------------------------------------------------
 
 def load_registry():
-    """Missing or unreadable registry means not installed anywhere."""
+    """Missing or unreadable registry means not installed."""
     try:
         with open(REGISTRY_PATH) as f:
             reg = json.load(f)
@@ -90,31 +102,9 @@ def save_registry(reg):
     _atomic_write(REGISTRY_PATH, reg)
 
 
-def _real(path):
-    return os.path.realpath(os.path.expanduser(str(path)))
-
-
-def is_active(payload, registry=None):
-    """True when the monitor is installed at user scope, or at folder scope for
-    the folder this session was launched in.
-
-    Keyed on CLAUDE_PROJECT_DIR (the launch root, stable for the session; Claude
-    Code exports it to hook processes) rather than the payload's cwd, which
-    follows Claude after `cd` or into a worktree. A registered folder covers
-    its subdirectories, mirroring where Claude Code reads
-    .claude/settings.local.json from when launched inside a repository."""
-    reg = load_registry() if registry is None else registry
-    if reg.get("user"):
-        return True
-    key = os.environ.get("CLAUDE_PROJECT_DIR") or (payload or {}).get("cwd") or ""
-    if not key:
-        return False
-    key = _real(key)
-    for folder in (reg.get("folders") or {}):
-        root = _real(folder).rstrip(os.sep)
-        if key == root or key.startswith(root + os.sep):
-            return True
-    return False
+def is_active():
+    """True once setup.py has installed the monitor for this user."""
+    return bool(load_registry().get("user"))
 
 
 def _empty_ledger(session_id):
@@ -122,6 +112,7 @@ def _empty_ledger(session_id):
         "session_id": session_id,
         "started_at": _now(),
         "updated_at": _now(),
+        "turn": 0,                  # stamped by UserPromptSubmit
         "counters": {"tool_calls": 0, "tool_failures": 0, "compactions": 0},
         "topics": [],
         "topic_counts": {},     # per-session mentions: turns the judge tagged
@@ -131,9 +122,10 @@ def _empty_ledger(session_id):
         "correction_log": [],   # {desc, count} — count grows on judge-flagged repeats
         "fail_streak": 0,       # consecutive failures; any success resets it
         "fail_times": [],       # epoch seconds of recent failures (burst detection)
+        "pending_prompts": [],  # {turn, prompt, ts} awaiting their Stop
         "turn_stats": [],       # {turn, duration_s, msg_len} — recorded, never graded
         "turns_graded": 0,
-        "judge_status": "pending",  # pending | ok | disabled | error: ...
+        "judge_status": "pending",  # pending | ok | disabled | skipped: ... | error: ...
         "schema_drift": [],         # payload fields expected but missing
     }
 
@@ -153,6 +145,69 @@ def load_ledger(session_id):
 def save_ledger(ledger):
     ledger["updated_at"] = _now()
     _atomic_write(ledger_path(ledger["session_id"]), ledger)
+
+
+def _lock_fd(path):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    return os.open(path, os.O_CREAT | os.O_RDWR, 0o644)
+
+
+@contextmanager
+def locked_ledger(payload):
+    """Exclusive read-modify-write of the session ledger.
+
+    Resolves the session id from the payload, falling back to the shared
+    'current' ledger (and noting drift) when a non-empty payload can't provide
+    one. Holds flock(LOCK_EX) on <ledger>.lock for the block, saves on clean
+    exit or SystemExit, and does NOT save when the body raised anything else —
+    a crash must not persist a half-mutated ledger. Holders keep the lock for
+    milliseconds; nothing may hold it across the judge call. The lock is a
+    separate file because _atomic_write swaps the ledger's inode; closing the
+    descriptor (or the process dying) releases it."""
+    payload = payload or {}
+    sid = _first(payload, SESSION_ID_FIELDS) or "current"
+    fd = _lock_fd(ledger_path(sid) + ".lock")
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        ledger = load_ledger(sid)
+        if payload and sid == "current":
+            note_drift(ledger, "session_id")
+        try:
+            yield ledger
+        except SystemExit:
+            save_ledger(ledger)
+            raise
+        except Exception as e:
+            log(f"[{sid[:8]}] hook failed inside locked_ledger, not saved: {e!r}")
+            raise
+        else:
+            save_ledger(ledger)
+    finally:
+        os.close(fd)
+
+
+@contextmanager
+def judge_lock(session_id, wait_s):
+    """Serializes the Stop pipeline per session so two overlapping Stops can't
+    grade from the same stale snapshot. Polls LOCK_NB up to wait_s and yields
+    True if acquired, False on expiry. Lock order is judge, then ledger: never
+    wait on this while holding locked_ledger."""
+    fd = _lock_fd(os.path.join(SESSIONS_DIR, f"{session_id}.judge.lock"))
+    acquired = False
+    try:
+        deadline = time.monotonic() + wait_s
+        while True:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                acquired = True
+                break
+            except OSError:
+                if time.monotonic() >= deadline:
+                    break
+                time.sleep(LOCK_POLL_S)
+        yield acquired
+    finally:
+        os.close(fd)
 
 
 # ---------------------------------------------------------------------------
@@ -325,16 +380,6 @@ def note_drift(ledger, field):
             f"field '{field}' is missing")
 
 
-def resolve_ledger(payload):
-    """Load the session ledger via the payload's session id, falling back to
-    a shared 'current' ledger when the payload can't provide one."""
-    sid = _first(payload, SESSION_ID_FIELDS)
-    ledger = load_ledger(sid or "current")
-    if payload and not sid:
-        note_drift(ledger, "session_id")
-    return ledger
-
-
 def get_user_prompt(payload, ledger=None):
     val = _first(payload, PROMPT_FIELDS)
     if val is None and payload and ledger is not None:
@@ -356,7 +401,7 @@ def record_topics(ledger, topic_names):
     per-session: the judge reuses the ledger's own list, so names stay
     consistent within a session and never leak between sessions."""
     for name in topic_names:
-        name = name.strip().lower().replace(" ", "-")[:40]
+        name = str(name).strip().lower().replace(" ", "-")[:40]
         if not name:
             continue
         if name not in ledger["topics"]:

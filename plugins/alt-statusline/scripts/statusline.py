@@ -5,7 +5,7 @@ row (per-session mention counts, once the judge has tagged any). The red
 tier's label is itself the call to action: "Restart Recommended".
 Receives session JSON on stdin; re-runs after every assistant message.
 Computes nothing semantic — just displays the ledger. With no ledger for this
-session (hooks not yet fired, or the monitor not set up for this folder) it
+session (hooks not yet fired, or the monitor not set up) it
 renders identity + git and a dim "Session: no data".
 
 Installed via setup.py, which points the statusLine setting at a stable
@@ -170,7 +170,14 @@ git_cache = (os.path.join(chm.SESSIONS_DIR, f"{sid}.git.json") if sid
 
 cw = data.get("context_window") or {}
 pct = cw.get("used_percentage")
-tokens = cw.get("current_usage") or cw.get("total_input_tokens")
+# live context size = input + cache_creation + cache_read; the docs publish
+# that sum as total_input_tokens and break it out under current_usage (an
+# object, never a number)
+tokens = cw.get("total_input_tokens")
+if not tokens and isinstance(cw.get("current_usage"), dict):
+    u = cw["current_usage"]
+    tokens = sum(u.get(k) or 0 for k in
+                 ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
 model = (data.get("model") or {}).get("display_name", "")
 effort = (data.get("effort") or {}).get("level", "")
 workdir = (data.get("workspace") or {}).get("current_dir") or data.get("cwd", "")

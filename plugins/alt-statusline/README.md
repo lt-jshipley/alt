@@ -17,44 +17,37 @@ file. A one-shot model call ("the judge") tags topics and audits open loops at
 each turn end; deterministic counters track everything else for free.
 
 **Installing the plugin changes nothing by itself.** Every hook exits at once
-until you run `/alt-statusline:setup`, which asks whether the gauge should run
-for you everywhere or only in the current folder, swaps the statusline in, and
-switches the hooks on. `/alt-statusline:remove` restores the previous
-statusline exactly and switches the hooks off.
+until you run `/alt-statusline:setup`, which swaps the statusline in for every
+session on this machine and switches the hooks on. `/alt-statusline:remove`
+restores the previous statusline exactly and switches the hooks off.
 
 ## Install
 
-Prerequisites: `python3` and `claude` on PATH (stdlib only, no packages).
+Prerequisites: `python3` and `claude` on PATH (stdlib only, no packages);
+macOS or Linux (the ledger lock uses `flock`).
 
 ```
 /plugin marketplace add lt-jshipley/alt
 /plugin install alt-statusline@agentic-leantechniques
 /reload-plugins
-/alt-statusline:setup          (or: /alt-statusline:setup user | folder)
+/alt-statusline:setup
 ```
 
-Scopes:
-
-- **user** — every session on this machine. Writes `statusLine` into
-  `~/.claude/settings.json`.
-- **folder** — only sessions launched in this repository. Writes
-  `.claude/settings.local.json` at the repository root (Claude Code reads the
-  local file from there even when launched in a subdirectory). The file stays
-  personal; setup warns if it is not gitignored.
-
-Setup refuses, with one line saying why, if `claude` or `python3` is missing,
-the state directory is not writable, or the target settings file is not valid
-JSON. It never leaves a half-installed state: settings are written atomically,
-the registry second, and settings roll back if the registry write fails.
+Setup writes `statusLine` into `~/.claude/settings.json`. It refuses, with one
+line saying why, if `claude` or `python3` is missing, the state directory is
+not writable, or the settings file is not valid JSON. It never leaves a
+half-installed state: settings are written atomically, the registry second,
+and settings roll back if the registry write fails.
 
 Effects are immediate: Claude Code reloads settings on save, so the statusline
 appears without a restart, and the hooks are live from the next event because
-the plugin is already loaded. In a folder Claude Code has not trusted yet, the
-statusline stays blank until the trust dialog is accepted.
+the plugin is already loaded.
 
 `/alt-statusline:remove` restores the previous `statusLine` value (or deletes
-the key if there was none), drops the scope from the registry, and keeps the
-session ledgers.
+the key if there was none), clears the registry, and keeps the session ledgers.
+
+To keep the gauge but skip the per-turn model call in one project, set
+`CHM_NO_JUDGE` to `1` in that project's settings `env` block (see Knobs).
 
 ## The statusline
 
@@ -72,7 +65,8 @@ Session: Restart Recommended | 42% used (84k) | corrections:2 · compactions:1
 
 Chips wear the grade color when they contributed to it; healthy chips stay
 green. With no ledger yet for the session, the gauge row reads `Session: no
-data`; it never borrows another session's grade.
+data`; it never borrows another session's grade. The token count in
+parentheses is the live context size Claude Code reports (`total_input_tokens`).
 
 Git symbols: `+staged !unstaged ?untracked =conflicts`, `⎇wt` linked worktree,
 `⚠` working on the default branch, `REBASING`-style in-progress labels,
@@ -120,16 +114,18 @@ Grading notes, each a deliberate stance:
 ```
 hooks/hooks.json         plugin hook wiring; scripts referenced via ${CLAUDE_PLUGIN_ROOT}
 scripts/
-  chm_common.py          shared state library (ledger I/O), the registry gate
+  chm_common.py          shared state library: ledger I/O, the two locks
+                         (locked_ledger, judge_lock), the registry gate
                          is_active(), grade() — the single source of truth for
                          the gauge — and the payload ADAPTER: the only place hook
                          payload field names appear
   on_counter.py          pure event-identity counter (`on_counter.py <name>`):
                          which counter to bump comes from argv at registration,
                          not the payload; also tracks failure streaks/timestamps
-  on_stop.py             Stop hook — extracts the turn delta, records per-turn
-                         stats, runs the judge, updates topics/loops/corrections
-  on_prompt_submit.py    UserPromptSubmit hook — stamps the turn, captures the
+  on_stop.py             Stop hook — consumes the turn's prompt, records per-turn
+                         stats, runs the judge (serialized per session), applies
+                         the verdict to a fresh ledger
+  on_prompt_submit.py    UserPromptSubmit hook — stamps the turn, queues the
                          prompt for the judge, injects the Restart warning
   on_session_start.py    SessionStart hook, arg-driven by matcher: `compact`
                          counts the splice and re-injects the ledger across
@@ -140,20 +136,23 @@ scripts/
                          points at (copied into the state dir by setup)
   setup.py               install / remove / status
   judge_prompt.md        instructions for the one-shot judge call
-  simulate.sh            plumbing, gate, grading, and setup round-trip checks
+  simulate.sh            plumbing, gate, grading, concurrency, and setup
+                         round-trip checks — no real model call
 skills/setup, skills/remove
 ```
 
-State lives outside the plugin, in `~/.claude/alt-statusline/` (override with
-`CHM_STATE_DIR`):
+State lives outside the plugin, in `~/.claude/alt-statusline/`, which must be
+on a local filesystem (`flock` is unreliable on network mounts):
 
 ```
-install.json             registry: plugin root + the scopes setup installed, each
-                         with its settings file and the backed-up statusLine
+install.json             registry: plugin root + the install record (settings
+                         file and the backed-up statusLine)
 launcher.py              what `statusLine.command` runs; execs the current
                          plugin's statusline.py, so plugin updates need no
                          settings change
 sessions/<id>.json       per-session ledger (kept; resume reuses it)
+sessions/<id>.json.lock  ledger lock (empty; never deleted)
+sessions/<id>.judge.lock serializes Stops per session (empty; never deleted)
 sessions/<id>.ctx.json   context-window sidecar written by the statusline
 sessions/<id>.git.json   5s git-segment cache
 chm.log                  debug log
@@ -171,6 +170,7 @@ The ledger (stable keys, rankable across sessions):
 ```json
 {
   "session_id": "…",
+  "turn": 3,
   "counters": { "tool_calls": 0, "tool_failures": 0, "compactions": 0 },
   "topics": ["billing-proration"],
   "topic_counts": { "billing-proration": 4 },
@@ -179,35 +179,71 @@ The ledger (stable keys, rankable across sessions):
   "corrections": 0,
   "correction_log": [{ "desc": "…", "count": 1 }],
   "fail_streak": 0,
+  "fail_times": [1725800000.0],
+  "pending_prompts": [{ "turn": 3, "prompt": "…", "ts": 1725800000.0 }],
   "turn_stats": [{ "turn": 3, "duration_s": 42, "msg_len": 1180 }],
-  "turns_graded": 0
+  "turns_graded": 0,
+  "last_warned_turn": 0,
+  "judge_status": "ok",
+  "schema_drift": []
 }
 ```
 
 `correction_log` entries grow a `count` when the judge flags a repeat.
 `turn_stats` (per-turn duration and reply length) is recorded but never graded.
+`judge_status` is `pending`, `ok`, `disabled`, `skipped: …`, or `error: …`;
+only errors grade.
+
+### Concurrency
+
+Hooks are separate processes and overlap: parallel tool calls fire
+`PostToolUse` concurrently, and the Stop hook is registered async, so it is
+still running while the next turn's prompt and tool calls arrive. Two rules
+keep the ledger honest:
+
+- **Every ledger write holds an exclusive lock** around the whole
+  read-modify-write, so no hook can overwrite another's increment. Holders keep
+  it for milliseconds; the statusline only reads and needs no lock.
+- **Stops are serialized per session.** The Stop hook consumes its prompt and
+  records turn stats first, then takes the judge lock, snapshots the judge's
+  input, runs the model call with no locks held, and applies the verdict by
+  index to a freshly loaded ledger. Because only Stops write the judge-owned
+  fields, the snapshot is exactly what the apply step sees. A Stop that cannot
+  get the judge lock within `CHM_JUDGE_WAIT_S` (default 25s) marks the turn
+  `skipped: busy` and exits rather than blocking.
+
+Prompt attribution is by timestamp: a prompt queued within a second of a Stop
+starting belongs to the next turn (input the user typed while Claude worked),
+and prompts left behind by interrupted turns are dropped with a log line.
 
 The judge is a one-shot call at each turn end. It sees only the turn delta plus
 its own prior state, reasons before it answers (a `reasoning` field leads its
 JSON schema), and is instructed to report nothing when unsure. It runs with all
-hooks disabled and an environment guard, so it can never trigger this plugin's
-own hooks. It degrades gracefully: with no usable model call, the judge chip
-shows the error and the deterministic counters keep working.
+hooks disabled, no tools, no session persistence, and an environment guard, so
+it can never trigger this plugin's own hooks or leave transcripts behind. It
+degrades gracefully: with no usable model call, the judge chip shows the error
+and the deterministic counters keep working.
 
 ## Testing
 
 `scripts/simulate.sh` fires fake hook payloads at the scripts against
 throwaway state and HOME directories — the activation gate, counters, grading,
-git segment, degraded payloads, and the setup install/remove round trip
-(existing statusline with padding, idempotent re-install, exact restore, no
-prior statusline, invalid JSON refused, folder scope from a subdirectory).
+git segment, token display, degraded payloads, the setup install/remove round
+trip, and the concurrency rules (a Stop mid-judge while the next turn writes,
+two overlapping Stops, ten parallel counters, judge-lock expiry). It never
+calls a real model: the judge is disabled, and the concurrency section uses a
+fake `claude` on PATH that sleeps and prints a canned verdict.
 
-For a live check without installing from the marketplace:
+The real judge path is checked by hand:
 
 ```
 cd <some repo> && claude --plugin-dir /path/to/alt/plugins/alt-statusline
-/alt-statusline:setup folder
+/alt-statusline:setup
 ```
+
+Take two or three turns, including one typed while Claude is still working.
+The gauge row should show no `judge:` chip and a `Topics:` row should appear.
+Then `/alt-statusline:remove`.
 
 ## Schema independence
 
@@ -223,25 +259,31 @@ counting never stops; the statusline never displays that ledger.
 
 ## Knobs & cost
 
-The judge costs one Haiku call per turn end (a few hundred input tokens plus the
-turn delta), in every session where the gauge is active. Env knobs, settable
-per project in that project's settings `env` block:
+The judge costs one Haiku call per turn end (roughly 8k prompt tokens with the
+turn delta), in every session. Env knobs, settable per project in that
+project's settings `env` block:
 
 - `CHM_NO_JUDGE=1` — counters only, zero model calls (topics/loops/corrections
   stop updating)
 - `CHM_JUDGE_MODEL` — model alias for the judge (default `haiku`)
 - `CHM_JUDGE_EFFORT` — optional `--effort` (`low|medium|high|xhigh|max`)
+- `CHM_JUDGE_WAIT_S` — how long a Stop waits for a running judge before
+  skipping the turn (default `25`)
 - `CHM_DEFAULT_BRANCH` — branches that trigger the git `⚠` (default `main,master`)
-- `CHM_STATE_DIR` — state directory (default `~/.claude/alt-statusline`)
+
+`CHM_STATE_DIR` relocates the state directory. It is a test override, not a
+per-project knob: the launcher pins the state dir setup installed into.
 
 ## Limitations
 
 - The ledger runs one async judge-cycle behind the conversation; the gauge is
   a trailing indicator by design.
-- Parallel tool calls can interleave the counter hooks; streak ordering is
-  best-effort.
+- Stops are serialized per session, so a turn's grade can wait for the previous
+  judge, and is skipped after `CHM_JUDGE_WAIT_S`.
+- A turn that completes in under a second leaves its prompt for the next Stop,
+  which drops it as an orphan; that reply is graded without its prompt.
 - Sessions whose payloads can't provide an id share the `current.json` ledger.
 - Grades are ordinal — meaningful against your own sessions, not as absolutes.
-- Ledgers are kept indefinitely; there is no pruning yet.
-- `python3` must be on PATH under that name; there is no interpreter shim for
-  Windows hosts yet.
+- Ledgers and lock files are kept indefinitely; there is no pruning yet.
+- macOS and Linux only: the locks use `flock`, and `python3` must be on PATH
+  under that name.
