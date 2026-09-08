@@ -2,7 +2,7 @@
 
 Agentic Lean Techniques. Claude Code workflows collected from client engagements: skills, commands, agents, and hooks that have proven useful more than once.
 
-This repo is a Claude Code plugin marketplace named `agenticleantechniques`. It publishes two plugins: `alt`, whose skills appear as `/alt:<skill>`, and `alt-statusline`, a session health gauge for the statusline that stays inert until you run its setup skill.
+This repo is a Claude Code plugin marketplace named `agentic-leantechniques`. It publishes two plugins: `alt`, whose skills appear as `/alt:<skill>`, and `alt-statusline`, a session health gauge for the statusline that stays inert until you run its setup skill.
 
 ## Install
 
@@ -10,7 +10,7 @@ Add the marketplace once, then install the plugin:
 
 ```
 /plugin marketplace add lt-jshipley/alt
-/plugin install alt@agenticleantechniques
+/plugin install alt@agentic-leantechniques
 ```
 
 Restart Claude Code after installing. Skills will show up under `/alt:`.
@@ -18,7 +18,7 @@ Restart Claude Code after installing. Skills will show up under `/alt:`.
 For the statusline gauge, install it separately, reload, then choose where it runs:
 
 ```
-/plugin install alt-statusline@agenticleantechniques
+/plugin install alt-statusline@agentic-leantechniques
 /reload-plugins
 /alt-statusline:setup        (asks: user scope or this folder)
 ```

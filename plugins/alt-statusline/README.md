@@ -28,7 +28,7 @@ Prerequisites: `python3` and `claude` on PATH (stdlib only, no packages).
 
 ```
 /plugin marketplace add lt-jshipley/alt
-/plugin install alt-statusline@agenticleantechniques
+/plugin install alt-statusline@agentic-leantechniques
 /reload-plugins
 /alt-statusline:setup          (or: /alt-statusline:setup user | folder)
 ```
