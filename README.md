@@ -32,7 +32,7 @@ Nothing is graded and no statusline changes until `setup` runs; `/alt-statusline
 plugins/alt/                       The alt plugin
   .claude-plugin/plugin.json       Plugin manifest
   skills/<name>/SKILL.md           Skills, invoked as /alt:<name>
-    examine/                       The decision interview: grilling's rounds with stakes and could-help on every question. Research in .project/research/agentic-skills/grill-me.md
+    examine/                       The decision interview: grilling's tree, one question a turn, with stakes and could-help on every question. Research in .project/research/agentic-skills/grill-me.md
     review-prose/                  Reviews a skill or doc for verbosity and reports what could go. Changes nothing
   presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: developer, business, research
 plugins/alt-statusline/            Session health gauge for the statusline; hooks + judge + statusline, gated behind /alt-statusline:setup

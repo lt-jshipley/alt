@@ -20,13 +20,13 @@ Re-run on the same seed: keep the numbers, earlier answers stay settled unless r
 
 ## Facts are never questions
 
-Read what the work touches, the record, and every source the sources file and preset name. Anything they answer is a fact; look it up and say where it came from in a few words. Send a sub-agent whenever a lookup deserves one and never hold a round for it: only the questions that depend on the answer wait. Zero questions is a success; never invent one.
+Read what the work touches, the record, and every source the sources file and preset name. Anything they answer is a fact; look it up and say where it came from in a few words. Send a sub-agent whenever a lookup deserves one and never hold the interview for it: a question that depends on the answer waits its turn. Zero questions is a success; never invent one.
 
-## The tree, the frontier, the round
+## The tree, the frontier, the turn
 
-Map the seed as a design tree: every decision branches into the decisions that hang off it. The frontier is every decision whose prerequisites are settled. Ask the whole frontier as one round, then wait. Two questions never share a round if one depends on the other.
+Map the seed as a design tree: every decision branches into the decisions that hang off it. The frontier is every decision whose prerequisites are settled. Ask one question from the frontier, then wait. Next is a child of what was just answered when one is on the frontier, else the frontier question whose if-wrong line costs most.
 
-A wound is a premise the seed gets wrong or a decision it never made, with several questions hanging off it. Wounds are roots, so they come first on their own. Hunt from six angles, against the seed and never the runner: feasibility, dependencies, edge cases, alternatives, scope and ordering, failure modes.
+A wound is a premise the seed gets wrong or a decision it never made, with several questions hanging off it. Wounds are roots, so they come first. Hunt from six angles, against the seed and never the runner: feasibility, dependencies, edge cases, alternatives, scope and ordering, failure modes.
 
 Before a candidate is asked, try to kill it. Does the record settle it? Then it is one line with its source, shown on request. Should the thing forcing the decision exist at all? Removing the cause is the best answer. Only survivors are asked, with no cap on count or kind.
 
@@ -53,15 +53,15 @@ Could help: <hat>, <why they hold the context>
 - On a values or taste question the recommendation reads "given what you've said," never as a preference.
 - Could help is help, not ownership.
 
-## A round
+## A turn
 
-Questions separated by a rule. Nothing renders above the first question and nothing announces what is coming. Every round ends with the same ask:
+Nothing renders before the first question, and nothing announces what is coming. Between questions, one line: what settled, retired, and opened, and how many are open. Every turn ends with the same ask:
 
 ```
-Answer by number, or "yes" for every recommendation. "share 3" sends one to the team, "more 3" goes deeper, "settled" shows what the record decided. Or tell me what's off.
+Answer by number, or "yes" for the recommendation. "share" sends it to the team, "more" goes deeper, "settled" shows what the record decided. Or tell me what's off.
 ```
 
-Read each answer against the record before it closes; one the record rules out gets one line naming the fact and stays open. Never act on an answer you were not given. Then recompute the frontier and say in one line what settled, retired, and opened. Numbers are stable and never reused. The interview ends when the frontier is empty, never when a list runs out.
+Read the answer against the record before the question closes; one the record rules out gets one line naming the fact and stays open. Never act on an answer you were not given. Numbers are stable and never reused. The interview ends when the frontier is empty, never when a list runs out.
 
 ## Close
 
