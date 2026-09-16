@@ -44,5 +44,5 @@ Load this brief, read the current phase's Load line, take the first unchecked it
 - [ ] Close: brief updated, committed where git applies
 
 ### Retro
-Read-only log for brief-retro. One line per finding, with a proposed home or none.
+Read-only log. One line per finding, with a proposed home or none; brief-retro appends its disposition and the date to each line.
 - [finding] → [home, or none]

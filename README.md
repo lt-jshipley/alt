@@ -33,6 +33,7 @@ plugins/alt/                       The alt plugin
   .claude-plugin/plugin.json       Plugin manifest
   skills/<name>/SKILL.md           Skills, invoked as /alt:<name>
     brief-create/                  Creates a brief, the personal working file that carries one piece of work across sessions, at .agentic/briefs/ in the consuming repo. Research in .project/research/agentic-skills/brief.md
+    brief-retro/                   Reads the retro lines of every closed brief together and walks them with the runner to a disposition. Appends one word and a date per line, nothing else
     examine/                       The decision interview: grilling's tree, one question a turn, with stakes and could-help on every question. Research in .project/research/agentic-skills/grill-me.md
     review-prose/                  Reviews a skill or doc for verbosity and reports what could go. Changes nothing
   presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: developer, business, research
