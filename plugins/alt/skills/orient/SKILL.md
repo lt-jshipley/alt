@@ -1,6 +1,6 @@
 ---
 name: orient
-description: Orients the session in the work it is about to do. Takes a brief, story key, branch, or a sentence, collects the core facts from where this team's sources say they live, and reports the system that work sits in. Reads only. Use when the user asks to orient or invokes /alt:orient.
+description: Orients the session in the work it is about to do. Takes a brief, story key, branch, or a sentence and reports the system that work sits in. Reads only. Use when the user asks to orient or invokes /alt:orient.
 argument-hint: [brief name, story key, branch, or the work in a sentence]
 ---
 
@@ -19,7 +19,7 @@ Read `.agentic/sources.md` if present. The work opens one seat; the others are r
 - tracker: the one item by key. Title, status, owner, description, and the thread items nobody answered. Never an epic's children.
 - record: decisions written about this work, wherever record points. Usually the same thread.
 - code: the part of the system the work touches. Start from what the brief's Load line, the ticket, and the branch's touched files name, then one step out: the folders or modules around it, the entry points, the tests beside it, what it calls and what calls it. Names and signatures, never a sweep. With a branch, its distance from its base and the working tree.
-- docs: what covers that part of the system, from the Load line, the ticket's links, and the docs seat's index when it has one. One step, not the seat.
+- docs: what covers that part of the system, from the Load line, the ticket's links, and the docs seat's index when it has one.
 - people: never asked.
 
 Then the brief in full when there is one; the current phase is the first with an unchecked item. Kind is the brief's `**Kind:**` line, else `## Preset` in any `.agentic/alt/*/extend-skill.md`, else developer.
