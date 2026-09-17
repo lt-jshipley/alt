@@ -1,6 +1,6 @@
 # Orient: research notes
 
-Started 2026-09-09; the lineages read 2026-09-16. Research behind the roadmap's orient skill, brief-level and project-level. Eight lineages in our own repos, 2025-10 to 2026-08, under three command names: `/start`, `/session`, `/orient`. The intent, the references, what each lineage is, where they disagree, and the carried-forward candidates are written. The shape is not decided.
+Started 2026-09-09; the lineages read 2026-09-16. Research behind the roadmap's orient skill, brief-level and project-level. Eight lineages in our own repos, 2025-10 to 2026-08, under three command names: `/start`, `/session`, `/orient`. The intent, the references, what each lineage is, where they disagree, and the carried-forward candidates are written. The shape was decided 2026-09-17; see the end.
 
 **This doc holds concepts to consider.** Being here is not a vote to keep. Each item earns its place, or does not, when the skill's shape is decided.
 
@@ -174,13 +174,24 @@ Examined with alt:examine; the record is `grill-me.md`, "Decided 2026-09-16".
 - Open decision 5, what is ambient, is not this skill's and stays open for orient.
 - Dropped as over-engineering: a plugin-level knowledge-map file, preset rewrites, a CLAUDE.md import written by a skill, a `.docs/` scaffold.
 
+## Decided 2026-09-17
+
+Settled in conversation with the runner, no examine run; the skill is `plugins/alt/skills/orient/SKILL.md`, alt 0.7.0.
+
+- Open decision 3: one skill, `orient`, brief-level. No dispatcher, no project survey, no `orient-project` now or later. The roadmap line is removed.
+- It orients in the named work so the session understands the system it will work in. It is not a work finder: bare means the standing brief, the file matching the branch or the one Active brief, else it asks once.
+- The argument is the intent: a brief, a story key, a branch, or a sentence.
+- Open decision 2, beyond `/init`: writes nothing, reads the work's brief, story, and branch through `sources.md`, and works with no code present.
+- Open decision 4: Kind is the brief's `**Kind:**` line, else the extension file's `## Preset`, else developer. Never inferred from the folder.
+- Open decision 5: nothing is ambient. No import line is written or read.
+- Open decision 7, the non-code case: the code seat is skipped unmentioned and the tracker, record, and docs seats carry the orientation. No special case.
+- Open decision 8: git says behind, the owner judges. Two disagreements only, the brief's Status against the tracker's and its Branches against git, both sides quoted, raw facts.
+- Open decision 9: the report shape is fixed in the skill and keeps the Read and Absent line.
+- Open decision 10: orient does not read CLAUDE.md, so the "To verify" items do not bear on it.
+- The brief template gains a `**Story:**` line so a brief and its story join without a branch-name convention. brief-create fills it or writes none.
+- Sources route the collection: the work opens one seat, the others are read where they join it. Per seat, the one tracker item and its unanswered thread, the record's decisions, one step out from the code named by the Load line, the ticket, and the branch's touched files, the docs those link to, and people never asked; a listed seat this session cannot reach becomes a look-this-up line for its Ask hat.
+- Not carried: era's code read in both directions, the dispatcher, the extension file, the project survey, listing briefs to choose from, a free-text tracker search by default.
+
 ## To write
 
-- Summary.
-- The problem the skill solves, and for whom.
-- Brief-level and project-level: what each answers, and for whom, once decision 3 is made.
-- What orient reads, in what order, and what it writes, if anything.
-- Kind of project: how it is detected, when to ask instead of infer, and the non-code case.
-- Relationship to `/init`, the presets, examine, brief-create, and the three artifact skills.
-- Degradation, one line each.
 - Public precedents beyond the `/init` camp, if any claim to orient without writing.

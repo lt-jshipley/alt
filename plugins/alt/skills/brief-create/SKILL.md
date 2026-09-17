@@ -24,7 +24,7 @@ One brief per piece of work, as many briefs as there is work. Never a brief abou
 
 ## Ask what the template needs
 
-One question a turn, and only for what the room, the record, and the code do not answer. Facts are looked up and cited in a few words. In order: goal, problem, who this is for and what changes for them, how we would know, done when, constraints, branches. Then propose the phases as units of change grouped in dependency order, from what was said and what the code shows, and let the runner adjust. Stop asking when every section can be filled.
+One question a turn, and only for what the room, the record, and the code do not answer. Facts are looked up and cited in a few words. In order: goal, problem, who this is for and what changes for them, how we would know, done when, constraints, story, branches. Then propose the phases as units of change grouped in dependency order, from what was said and what the code shows, and let the runner adjust. Stop asking when every section can be filled.
 
 ## Then examine
 
@@ -32,7 +32,7 @@ Invoke `alt:examine` against the drafted answers. Its Decided list folds into th
 
 ## Write
 
-Read `${CLAUDE_PLUGIN_ROOT}/skills/brief-create/template.md` only now. Fill it and write the file. Read it back: every phase ends with its close items, Branches is filled or reads none, no section is empty. Report the path and two lines on what the brief is. Then stop.
+Read `${CLAUDE_PLUGIN_ROOT}/skills/brief-create/template.md` only now. Fill it and write the file. Read it back: every phase ends with its close items, Story and Branches are filled or read none, no section is empty. Report the path and two lines on what the brief is. Then stop.
 
 ## Rules
 

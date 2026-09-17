@@ -2,6 +2,7 @@
 
 **Status:** Active
 **Kind:** [developer | business | research]
+**Story:** [ticket key, or none]
 **Branches:** [branch names, or none]
 
 Load this brief, read the current phase's Load line, take the first unchecked item. At a session's end, ask for the brief to be updated. When every Done When item holds, set Status to Closed and move this file to `.agentic/briefs/closed/`.
