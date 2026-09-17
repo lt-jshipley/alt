@@ -1,11 +1,11 @@
 ---
 name: sources-sync
-description: Drafts or refreshes .agentic/sources.md, the one-page file that tells every alt skill where this team's facts live: code, docs, tracker, record, people. Reads the folder and the session's tools, asks only what it cannot see, writes on the runner's go. Use when a repo is first wired to alt, when a source moves, or when the user invokes /alt:sources-sync.
+description: Drafts or refreshes .agentic/sources.md, the one-page file that tells every alt skill where this team's facts live: code, docs, tracker, record, people. Use when a repo is first wired to alt, when a source moves, or when the user invokes /alt:sources-sync.
 ---
 
 # sources-sync
 
-Every alt skill looks facts up before it asks. This file is where they look. It is the team's: one page, human-owned, committed. This skill drafts it from what is in the room and decides nothing for the team.
+Every alt skill looks facts up before it asks. This file is where they look. It is the team's: one page, human-owned, committed.
 
 ## Seats
 
@@ -21,15 +21,15 @@ Paths, counts, verdicts, and anything restating another seat live nowhere. Secre
 
 ## Survey
 
-Read `.agentic/sources.md` in the working directory if present. Then look: `.git` and its remotes; `.docs/` or `docs/`; a CLAUDE.md; an Atlassian, GitHub, or Azure DevOps tool the session can reach; a tracker key in recent commit messages; the record heading of the preset this repo names (`## Preset` in any `.agentic/alt/*/extend-skill.md`, else developer). Each seat gets a draft line and its source in two words, or "not seen".
+Read `.agentic/sources.md` in the working directory if present. Then look at the folder: `.git` and its remotes; `.docs/` or `docs/`; a CLAUDE.md; the record heading of the preset this repo names (`## Preset` in any `.agentic/alt/*/extend-skill.md`, else developer). Each seat the file or the folder answers gets a draft line and its source in two words; the rest read "not seen". Nothing outside the folder places a seat: not a tool the session can reach, not a key in a commit message.
 
 ## Ask
 
-One question a turn, only for a seat nothing answered. Never ask what the folder shows. Zero questions is a success.
+When any seat reads "not seen", the first question is which tools this team uses: GitHub, Atlassian, Azure DevOps, or name them. Each named tool fills the seats it speaks to from `stacks.md`. Then one question a turn for any seat still empty.
 
 ## Write
 
-Read `${CLAUDE_PLUGIN_ROOT}/skills/sources-sync/template.md` only now. Show the filled file. On the runner's go, write `.agentic/sources.md`, creating `.agentic/` when absent. When a file already exists, show each seat where the file and the folder disagree, both sides quoted, and change a line only on a yes. Then stop.
+Read `${CLAUDE_PLUGIN_ROOT}/skills/sources-sync/template.md` and `stacks.md` beside it only now. Fill each seat from the folder first, then the named tools, then the answers. Show the filled file. On the runner's go, write `.agentic/sources.md`, creating `.agentic/` when absent. When a file already exists, show each seat where the file and what this run learned disagree, both sides quoted, and change a line only on a yes. A default from `stacks.md` is never a disagreement. Then stop.
 
 ## Rules
 
@@ -40,6 +40,6 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/sources-sync/template.md` only now. Show the 
 
 ## When something is missing, say so in one line
 
-- No git, no tools, no docs folder: five "not set" seats and one question, what do you use.
+- A named tool with no block in `stacks.md`: ask its seats one at a time, like any other answer.
 - `.agentic` exists and is not a folder: stop and name it.
 - The existing file has a heading the template lacks: keep it and report it.

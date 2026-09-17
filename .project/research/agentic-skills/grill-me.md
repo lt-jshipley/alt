@@ -465,6 +465,15 @@ Examined 2026-09-16 with alt:examine; the skill is `alt:sources-sync`, alt 0.5.0
 - No plugin-level reference file: the routing rule is the skill's Seats section. Presets keep their record heading.
 - examine displays the team questions and recommends the paste; it never posts. This reverses the post-on-yes line under "The team questions list."
 
+### Decided 2026-09-17
+
+Examined 2026-09-17 with alt:examine, two questions then closed; alt 0.6.0.
+
+- `sources-sync` places a seat only from the existing file or the folder, never from a tool the session can reach or a key in a commit message. A session's MCPs belong to the runner, not the team. It asks which tools the team uses, offering GitHub, Atlassian, Azure DevOps, or name them.
+- Named tools fill the seats they speak to from one defaults file, `skills/sources-sync/stacks.md`, keyed per tool rather than per stack so GitHub code with a Jira tracker works.
+- A default from `stacks.md` never generates a refresh diff; only the folder and the runner's answers do.
+- This narrows the 09-16 line "no plugin-level reference file": the routing rule stays in Seats, and the only plugin-level defaults are the three blocks.
+
 ## Principles surfaced by this research
 
 Recorded 2026-09-03. Two rules that came out of the grill-me work but are not about grill-me. They apply to every skill alt makes and to what each skill tries to do. Recorded here until alt has a doctrine home for them.

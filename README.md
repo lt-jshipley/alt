@@ -36,7 +36,7 @@ plugins/alt/                       The alt plugin
     brief-retro/                   Reads the retro lines of every closed brief together and walks them with the runner to a disposition. Appends one word and a date per line, nothing else
     examine/                       The decision interview: grilling's tree, one question a turn, with stakes and could-help on every question. Research in .project/research/agentic-skills/grill-me.md
     review-prose/                  Reviews a skill or doc for verbosity and reports what could go. Changes nothing
-    sources-sync/                  Drafts or refreshes .agentic/sources.md, the one page that tells every alt skill where this team's facts live: code, docs, tracker, record, people
+    sources-sync/                  Drafts or refreshes .agentic/sources.md, the one page that tells every alt skill where this team's facts live: code, docs, tracker, record, people. Asks which tools the team uses and fills the seats from stacks.md defaults for GitHub, Atlassian, and Azure DevOps
   presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: developer, business, research
 plugins/alt-statusline/            Session health gauge for the statusline; hooks + judge + statusline, gated behind /alt-statusline:setup
   hooks/hooks.json                 Plugin hooks, inert until setup registers a scope
