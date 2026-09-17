@@ -6,5 +6,4 @@ Items we want to consider. One line each, a note only where the name does not sa
 - story / ticket
 - epic
 - triage
-- knowledge-map: may be a file convention under .agentic rather than a skill
 - peer-review

@@ -75,11 +75,11 @@ Decided
 For the team (copy and paste)
 - For <hat>: <the question>. If wrong: <what breaks, for whom>
 
-Post these to <the record>? yes or no.
+These go to <the record>; paste them there.
 What next?
 ```
 
-Team bullets keep their if-wrong lines so the stakes cannot be shrunk on the way. Offer the post only when a record and a way to write to it exist; post only on yes. Then stop. Never build, never enter plan mode.
+Team bullets keep their if-wrong lines so the stakes cannot be shrunk on the way. Name the record and recommend the paste; never post. Then stop. Never build, never enter plan mode.
 
 ## When something is missing, say so in one line
 

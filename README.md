@@ -36,12 +36,13 @@ plugins/alt/                       The alt plugin
     brief-retro/                   Reads the retro lines of every closed brief together and walks them with the runner to a disposition. Appends one word and a date per line, nothing else
     examine/                       The decision interview: grilling's tree, one question a turn, with stakes and could-help on every question. Research in .project/research/agentic-skills/grill-me.md
     review-prose/                  Reviews a skill or doc for verbosity and reports what could go. Changes nothing
+    sources-sync/                  Drafts or refreshes .agentic/sources.md, the one page that tells every alt skill where this team's facts live: code, docs, tracker, record, people
   presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: developer, business, research
 plugins/alt-statusline/            Session health gauge for the statusline; hooks + judge + statusline, gated behind /alt-statusline:setup
   hooks/hooks.json                 Plugin hooks, inert until setup registers a scope
   scripts/                         Hook scripts, statusline, judge prompt, setup.py, launcher, simulate.sh
   skills/setup, skills/remove      Install and uninstall
-.agentic/                          Reserved here; in a consuming repo this holds alt extension files and the gitignored briefs/ folder
+.agentic/                          Reserved here; in a consuming repo this holds sources.md, alt extension files, and the gitignored briefs/ folder
 .claude/                           Reserved for Claude Code config for working in this repo itself; empty so far
 .project/research/statusline/      Research behind the gauge's context-window thresholds
 ```

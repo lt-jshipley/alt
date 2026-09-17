@@ -453,6 +453,18 @@ This file is the team layer of the seed described under the non-developer proble
 
 Each section is a few lines: the home, how to reach it, who can. A non-technical team's file might have three sections filled and the rest empty, and that is correct.
 
+### Decided 2026-09-16
+
+Examined 2026-09-16 with alt:examine; the skill is `alt:sources-sync`, alt 0.5.0.
+
+- Five seats, and every fact has one: code, docs, tracker, record, people. Paths, counts, verdicts, and restated facts live nowhere; secrets are never a seat.
+- Three lines per seat: where, how to reach it, who to ask when this runner cannot. Cost only where a tool bills.
+- The file stays `.agentic/sources.md`, read from the working directory only. How repos relate is the team's setup, written under code, never assumed by a skill.
+- `sources-sync` drafts it from what is in the folder and the session's tools, asks only what it cannot see, writes on the runner's go, and reports disagreements when a file exists. Orient stays read-only.
+- Long-term docs default to `.docs/` in a consuming repo.
+- No plugin-level reference file: the routing rule is the skill's Seats section. Presets keep their record heading.
+- examine displays the team questions and recommends the paste; it never posts. This reverses the post-on-yes line under "The team questions list."
+
 ## Principles surfaced by this research
 
 Recorded 2026-09-03. Two rules that came out of the grill-me work but are not about grill-me. They apply to every skill alt makes and to what each skill tries to do. Recorded here until alt has a doctrine home for them.
