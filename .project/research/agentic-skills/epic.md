@@ -19,6 +19,15 @@ Considered and not listed: Accelerate, Inspired, Lean UX, The Lean Product Playb
 
 Related in this repo: `story.md` and `triage.md`, the artifacts below and beside this one. `grill-me.md`, examine's wound: a premise the seed gets wrong or a decision it never made, which is most often an epic-level gap surfacing in a story. `orient.md`, how a skill learns what kind of project this is and where its facts live. `brief.md`, the unit of work an epic is broken into.
 
+## Reading plan, 2026-09-18
+
+Which references earn a dive for this skill, decided in conversation 2026-09-18. A book earns a full read when it would change the skill's shape; a chapter when it settles one question; nothing when a stronger book on the shelf already says it.
+
+- **Read in full.** User Story Mapping: the map is what an epic is, sliced by outcome. Evidence Guided: goals to ideas to steps with a confidence level on each, so an epic can state how much it actually knows. Continuous Discovery Habits: the opportunity above a set of stories is the epic-to-story hierarchy with an outcome above it.
+- **One chapter.** Empowered, team objectives: "a problem handed to a team, not a feature list" decides what an epic is here, and the same author's Inspired covers the rest.
+- **Not for this skill.** Measure What Matters: OKRs are the form most likely to push the epic toward a template a team will not fill honestly; Patton's outcomes and Gilad's goals cover the need. Lean Analytics: startup framing, and the one-metric idea overlaps the above.
+- **Hold while reading.** The books say what an epic should be in a product org with discovery and a product team. The earlier suite said what a skill does to a record in a shop with neither, which is most engagements. Nothing on the shelf speaks to the research preset, and business is thinly covered.
+
 ## To write
 
 - Summary.

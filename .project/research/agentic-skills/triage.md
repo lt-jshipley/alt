@@ -21,6 +21,15 @@ Considered and not listed: Empowered, Lean Analytics, Lean UX, Measure What Matt
 
 Related in this repo: `grill-me.md`, the "Symptom versus wound" principle and the incident that produced it. `story.md` and `epic.md`, the artifacts triage orders. `orient.md`, how a skill learns what kind of project this is and where its facts live.
 
+## Reading plan, 2026-09-18
+
+Which references earn a dive for this skill, decided in conversation 2026-09-18. A book earns a full read when it would change the skill's shape; a chapter when it settles one question; nothing when a stronger book on the shelf already says it.
+
+- **Read in full.** Continuous Discovery Habits: opportunity assessment is triage. Evidence Guided: impact, confidence, and ease with an evidence ladder, a scoring vocabulary the skill does not have to invent. Thinking in Systems, the leverage-points chapter in particular: the outline's "what a count is a symptom of" is unanswered and this is where the answer lives. Inspired: riskiest assumption first; read for story, used here.
+- **One chapter.** Accelerate, batch size and WIP limits: the only voice against ceremony on the shelf, and what keeps triage from becoming a gate.
+- **Not for this skill.** The Lean Product Playbook: a second scoring scheme when Gilad's already carries the confidence dimension alt cares about. The Lean Startup: Torres and Gilad are its operational descendants. The Design of Everyday Things: one idea, a reported user error is a design wound, worth a sentence and not a read.
+- **Hold while reading.** The books say how a product org orders work. The earlier suite said what a skill does to a record in a shop with no discovery and no product team, which is most engagements. Nothing on the shelf speaks to the research preset, and business is thinly covered.
+
 ## To write
 
 - Summary.
