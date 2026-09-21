@@ -180,6 +180,15 @@ The skill
 
 Headless, `claude -p --plugin-dir`, the reminder-resend idea pasted, no tracker, no code, no sources file. The shape held: a verb-phrase title, parent none, the role in the first sentence, a goal line, four cases, the constraint with its source, `Split?` first under Open, no size, priority, metric, or verdict, and "write skipped" said once. What it did wrong: examine ran nine questions to an empty room and every one landed under Open, with two more lines for the checks it had no data for and the facts it could not reach, so Open held eleven items against a story of four cases. That is the no-code, no-runner worst case; an interactive run in the repo settles most of it before the draft. Watch in use: whether Open stays short when the code is there, and whether the "look up, do not ask" line the skill invented for unreachable facts is one the template should name. The business preset stopped in one line as specified.
 
+## Follow-ups from the epic reading, 2026-09-21
+
+Agreed in conversation after the epic sources were read; decided alongside the epic, not before.
+
+- The goal line is written only on a standalone story. A parented story reads it up from the epic's need, which the skill already fetches. A standalone story carrying its own goal is allowed and is going to happen; the count of them is triage's symptom.
+- A constraint inherited from the epic is not repeated; its source line says "the parent."
+- Open gets an upward exit. When the Open questions are about the need, the outcome, or the why rather than the cases, the story says so in one line and routes them to the parent, or to "no parent" as triage's symptom. The fixture run's eleven Open items were this.
+- The epic body lists only the pieces with no story yet. The children with stories are the tracker's parent links, so Q11 is the source of truth for the index and the epic never restates it.
+
 ## To write
 
 - Summary.

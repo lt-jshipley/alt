@@ -1,6 +1,6 @@
 ---
 name: sources-sync
-description: Drafts or refreshes .agentic/sources.md, the one-page file that tells every alt skill where this team's facts live: code, docs, tracker, record, people. Use when a repo is first wired to alt, when a source moves, or when the user invokes /alt:sources-sync.
+description: Drafts or refreshes .agentic/sources.md, the one-page file that tells every alt skill where this team's facts live: code, docs, tracker, record, measures, people. Use when a repo is first wired to alt, when a source moves, or when the user invokes /alt:sources-sync.
 ---
 
 # sources-sync
@@ -9,12 +9,13 @@ Every alt skill looks facts up before it asks. This file is where they look. It 
 
 ## Seats
 
-Five, and every fact has one.
+Six, and every fact has one.
 
 - code: changes with the code. The repos.
 - docs: changes with the business. `.docs/` unless the team keeps them elsewhere: a Confluence space, a wiki, `docs/`.
 - tracker: changes as the work progresses. Jira, Issues, Boards.
 - record: where a decision about a piece of work gets written. Usually the tracker item.
+- measures: where this team's numbers live and who can pull one. Analytics, a dashboard, a report, a query. Epic-refine reads it for a baseline; no tool fills it by default.
 - people: who holds what nothing else does.
 
 Paths, counts, verdicts, and anything restating another seat live nowhere. Secrets are never a seat.

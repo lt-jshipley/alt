@@ -27,11 +27,11 @@ Facts are looked up, never asked, and each is cited in a few words.
 
 ## Ask
 
-One question a turn, only for what the room, the thread, and the code do not answer. In order: whose need this is and what they can do once it lands, what is broken today and the stake, the goal behind the feature, the cases that change what gets built, the check for each claim that could be wrong, any constraint no case would surface. Stop asking when the shape can be filled. A check with no data to run it is an Open line, not a question.
+One question a turn, only for what the room, the thread, and the code do not answer. In order: whose need this is and what they can do once it lands, what is broken today and the stake, the goal behind the feature when there is no parent to read it from, the cases that change what gets built, the check for each claim that could be wrong, any constraint no case would surface. Stop asking when the shape can be filled. A check with no data to run it is an Open line, not a question.
 
 ## Then examine
 
-Invoke `alt:examine` against the draft. Its Decided list folds into cases, checks, and constraints. Its team bullets go under Open with their hats and if-wrong lines. If examine did not load, Open reads `examine did not run; run /alt:examine on this story` and the closing line says so.
+Invoke `alt:examine` against the draft. Its Decided list folds into cases, checks, and constraints. Its team bullets go under Open with their hats and if-wrong lines. When those bullets are about the need, the outcome, or the why rather than the cases, one `Parent:` line under Open says so and names the parent key or `none`; they are the epic's questions surfacing here. If examine did not load, Open reads `examine did not run; run /alt:examine on this story` and the closing line says so.
 
 ## Show, then write
 

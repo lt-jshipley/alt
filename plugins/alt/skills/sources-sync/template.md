@@ -22,5 +22,10 @@ Ask: [hat]
 Reach: [as tracker, or a path]
 Ask: [hat]
 
+## measures
+[where the numbers live: analytics, a dashboard, a report, a query]
+Reach: [path, URL, or MCP]
+Ask: [hat]
+
 ## people
 - [hat]: [what only they hold]
