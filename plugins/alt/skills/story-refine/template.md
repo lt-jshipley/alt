@@ -18,4 +18,4 @@ Open
   If wrong: [what breaks, for whom]
 
 Code: [paths to start reading]
-Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included.
+Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included. An answered Open line leaves as one comment: `Closed from Open: <the question> <the answer>, per <who, date>.`

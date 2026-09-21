@@ -476,7 +476,7 @@ Examined 2026-09-17 with alt:examine, two questions then closed; alt 0.6.0.
 
 ## Principles surfaced by this research
 
-Recorded 2026-09-03. Two rules that came out of the grill-me work but are not about grill-me. They apply to every skill alt makes and to what each skill tries to do. Recorded here until alt has a doctrine home for them.
+Recorded 2026-09-03, third rule added 2026-09-21. Rules that came out of the grill-me and triage work but are not about either. They apply to every skill alt makes and to what each skill tries to do. Recorded here until alt has a doctrine home for them.
 
 ### Symptom versus wound
 
@@ -494,6 +494,13 @@ Every skill should coach on some level, and there are two directions.
 - **Coaching the user.** In this era guards are brittle: a session can be closed and a new one opened, and any gate can be bypassed. What holds is teaching. When a skill says no, or says this is not yours, it says why, what a senior would do, and what to bring to the conversation. The mentoring payload that `explore` withheld and `examine` replaced with a derivation comes back, in plain words, aimed at the person's growth. For a junior developer this is teaching what their leadership is not.
 - **Coaching the AI.** era's stances describe themselves as "the record of how the model fails in this era." Every skill that names a known model tendency and corrects it is coaching the model: edits on momentum, documents eagerly, tidies code it passes through, offers a menu when the record decides, answers its own questions. A skill that does not carry this correction inherits the tendency.
 - **Make the right move the cheapest move.** Coaching is not only explanation. The developer in the incident reshaped the question because composing the escalation was hard and exposed. A skill that hands over the ready-to-send message, addressed to the owner, with the wound and the harm in it, has flipped the path of least resistance. That is coaching by design rather than by guard.
+
+### The durable version, tailored toward
+
+An alt skill is the durable, real-value version of its practice, presented as it is. A team tailors its own version to where it is, and the tailored version's job is to get that team to the next better version and closer to this one. The skills never lower the target to meet the team; they are designed for the residue that survives done-column pressure, not for the ideal team, and those are different things.
+
+- **The tailoring is the engagement's work, not the plugin's.** alt ships the target. What a team can hold this quarter is decided with them, at their tracker, and lives in their extension files.
+- **The target still fixes the small thing.** A skill that finds a wound under every count and sends the team off for months when a one-line answer was right has swung the pendulum past the symptom-fixers. Meadows: parameters matter "to the individual who's standing directly in the flow." Fix what the record settles, route what nobody holds, and say which is which.
 
 ## Cross-cutting observations
 

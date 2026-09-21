@@ -40,6 +40,7 @@ plugins/alt/                       The alt plugin
     review-prose/                  Reviews a skill or doc for verbosity and reports what could go. Changes nothing
     sources-sync/                  Drafts or refreshes .agentic/sources.md, the one page that tells every alt skill where this team's facts live: code, docs, tracker, record, measures, people. Asks which tools the team uses and fills the seats from stacks.md defaults for GitHub, Atlassian, and Azure DevOps
     story-refine/                  Creates a story in the tracker from an idea or a pasted draft, or refines an existing item into one: every line changes the code, proves it, or stops a guess. Shows the draft, writes on the runner's go. Research in .project/research/agentic-skills/story.md
+    triage/                        Reads a scope of open work in full and says what its symptoms are symptoms of: fixes what the record settles, routes what nobody holds as an Open line to the holder, names what is holding. Never grades or orders. Research in .project/research/agentic-skills/triage.md
   presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: developer, business, research
 plugins/alt-statusline/            Session health gauge for the statusline; hooks + judge + statusline, gated behind /alt-statusline:setup
   hooks/hooks.json                 Plugin hooks, inert until setup registers a scope
