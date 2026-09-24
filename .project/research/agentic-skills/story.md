@@ -216,6 +216,15 @@ Reviewer agreement was the useful signal: five independent reads converged on th
 - A Docs slot after Code: what says what this part does today and changes with it, omitted when nothing does. A description string the product shows is code for the line test; the slot names what changes with the code.
 - Open: a gate that nothing named in a Check was written without the file opened; whether "Unchanged." earns one boundary line; the upward exit for the need itself when several stories come from one cause.
 
+## Verification runs, 2026-09-24
+
+alt 0.11.2, the runner present, tracker reached through `gh`, both in agent-ready-assessment.
+
+- Refine #164. The run quoted each section where it and the item disagreed. Every expected offender surfaced and left on the runner's yes: the verify.sh gate, "per the runner", the checks.md line number, the checks.md deliverable sitting inside Checks. A Docs line appeared naming the reference entry and saying the two description strings hold. The two Open lines were answered in two turns and left as Closed from Open comments naming the person. Decisions found two roots; both were answered in the room and folded, one into the Constraint, whose reason changed from "because Java and TypeScript do" to "neither the work nor the risk is per project". One "Unchanged." case stayed, as the rule keeps existing lines. Not asked for and worth keeping: the homework caught a false lean in the item (the Java sibling's Location is null) and a false claim in the opener (the category floors at 34 projects, not fifteen).
+- Create, a fake duplicate of #167, every decision the session's own, closed after as #170. Default output with no runner steering: no gate, no repo-policy constraint, no bare line number, a Docs line naming the reference entry and the description string, a Constraint that passed the tempt test (accepting a false pass, and #108's boundary), no "Unchanged." or "Existing test." lines. Decisions returned zero roots; the code settled everything the draft left implicit. The comment shrank from 3,644 characters of pasted research on #167 to 642 of source the body rests on. The body grew from 453 to 483 words, the Docs line and the git-index check accounting for it. The consultant opener is still there: Kind D, the missing epic, not this change.
+
+Read: the four bracket tests hold on first contact with real code. Kind C ("Unchanged.") and Kind D (the opener and the parent) are the next items; the verification gate (nothing named in a Check without the file opened) is the one that mattered most in the review and is still unwritten.
+
 ## To write
 
 - Summary.
