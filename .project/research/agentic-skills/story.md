@@ -228,6 +228,10 @@ A five-hat board (senior developer, junior developer, coding agent, tech lead, p
 - A cross-story contract is an architecture artifact: an ADR, the parent's Constraint, or a tracker relation. The story cites it and never restates it. The #165 and #168 "one shared map" lived in two stories that drifted the same day; that is the missing epic showing up as a constraint.
 - A fixed closing sentence in every story: "If the code contradicts a line above, the line missed the need. Work out what the need requires, alone, with an agent, or with the team, before building." Not "stop and say which line": a contradiction is the story's miss and a return to the value, whoever does the returning.
 - Line test amended: every line says what the system will do for whom, proves it where the person sees it, or stops a guess; none says how.
+- Cases are rules: a situation the person could set up without reading the code, and what they see in the product's own words. The how had three doors left after Code went, each visible in #168: an internal in the condition ("No `DotNetSolution` in the context"), the code's vocabulary ("Location hint string", "AppliesToTestProjects"), and examples standing in for rules (two projects, one, both: a truth table, which is a test plan).
+- Checks are the examples, at least one per case; a case with no check is an Open line. A check with no case is a test detail and goes.
+- Data a rule turns on, a list, a map, a threshold, is the what: a short table in the case, a cited comment when long. #168's prose map was the wrong form, not the wrong content.
+- "What the product shows" is per repo, under `## Shows` in `.agentic/alt/story-refine/extend-skill.md`, and the product's words come from the repo's language file, CONTEXT.md here. Not in the template: a slot per field is a template zombie by the next product. Follows grill-me.md's ruling that skill-specific per-repo content lives in a per-skill extension file.
 
 ## Verification runs, 2026-09-24
 

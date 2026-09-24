@@ -14,7 +14,7 @@ The seed is $ARGUMENTS or whatever is in the room: a key, a pasted story, an ide
 
 Preset: the `## Preset` heading of any `.agentic/alt/*/extend-skill.md`, else developer.
 
-Read if present, ignore if absent: `.agentic/sources.md`, where this team's facts live.
+Read if present, ignore if absent: `.agentic/sources.md`, where this team's facts live, and `.agentic/alt/story-refine/extend-skill.md`, this repo's overrides under two headings. `## Preset`: one word. `## Shows`: the fields the product shows a person, which every case names as final wording or the boundary line covers.
 
 ## Homework
 
@@ -22,7 +22,7 @@ Facts are looked up, never asked, and each is cited by path and a symbol, headin
 
 - tracker: the item by key, its full thread, and the parent the field names. A question the thread answered is not open. Never search by text; offer the duplicate search in one line and run it only on a yes.
 - code: the part the story names, one step out: what it calls, what calls it, the tests and fixtures beside it. Cases come from here; so do the numbers a check can run against.
-- docs: what covers that part, from the sources file and the item's links, and what the product itself says about it.
+- docs: what covers that part, from the sources file and the item's links, what the product itself says about it, and the file that defines the product's words when the repo has one; cases are written in them, and a word the cases need that it lacks is either the how or a term the repo should define.
 - people: never asked.
 
 The homework shapes the cases and catches false premises; none of it is written into the story. A fact a case rests on is stated at the product level in the case, and goes to a comment only when a reader might dispute it.

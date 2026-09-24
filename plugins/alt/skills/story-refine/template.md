@@ -4,11 +4,11 @@
 [The goal behind the feature, in one sentence, so polish and the point are told apart. Only on a story with no parent; a parented story reads it from the epic.]
 
 Cases
-- [condition]: [what the person sees]. Every string the product shows that this change touches, as final wording. Never the mechanism.
+- [a situation the person could set up without reading the code]: [what they see, in the product's own words]. Rules, not examples; the examples are Checks. Every string the product shows that this change touches, as final wording. Data a rule turns on, a list, a map, a threshold, is the what: a short table here, a cited comment when long. Never the mechanism.
 - [The strings this change leaves alone, in one line. Only when a reader would wonder.]
 
 Checks ([where the data lives: a repo shape, a sandbox value])
-- [input] → [what the report or CLI shows]. One per claim that could be wrong, a demonstration someone could run in front of the team. Never the test that proves it. A gate the repo applies to every change is not a check.
+- [input] → [what the report or CLI shows]. One per claim that could be wrong and at least one per case; a case with no check is an Open line. A demonstration someone could run in front of the team. Never the test that proves it. A gate the repo applies to every change is not a check.
 
 [Constraint: a limit no case or check would surface, stated as the outcome it protects, and where it comes from: "the parent", an ADR, or a person by name and date. A repo rule is a constraint only when this story's change would tempt breaking it; then one line names the rule and the temptation. A rule shared with another story lives on the parent or in an ADR and is cited, never restated. Only when real.]
 
