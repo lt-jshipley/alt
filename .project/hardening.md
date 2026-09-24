@@ -33,7 +33,7 @@ On a client
 - [ ] Run epic-refine on a real epic with children
 - [ ] Run triage on a real board or epic scope
 - [ ] Fill the run log for each
-- Notes:
+- Notes: first real-code run 2026-09-24, six story-refine stories in agent-ready-assessment, reviewed by five role agents rather than run-logged; findings and the template changes in `story.md`, Field run. The run-log template is still unwritten.
 
 ### 2. Examine floods empty rooms (value 4)
 Story fixture: eleven Open lines against four cases. Epic fixture: six. Every skill invokes examine, so the defect multiplies and the Open section is the suite's first impression. Likely small: a cap, or a collapse of "facts not reachable" into one line when no code or tracker is present.
@@ -49,7 +49,7 @@ Now
 - [ ] Point the README at it
 After field runs
 - [ ] Decide whether to swap for plainer words in the skills themselves
-- Notes:
+- Notes: 2026-09-24, "per the runner" reached a public tracker in the first real run; 0.11.1 rules the dialect out of anything written outside the session and gives the developer preset a Runner hat.
 
 ### 4. Density (value 3)
 Skill files run 500 to 1100 words of packed rules; the triage fixture drift (a parent set from a comment) is the evidence. Fix after item 1 shows which clauses the model ignores; cutting blind removes the wrong ones. review-prose exists for this.

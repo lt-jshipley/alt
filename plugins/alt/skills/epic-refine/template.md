@@ -19,10 +19,10 @@ Not yet a story
 
 Not: [the piece], because [one clause]. [Only when a boundary was drawn.]
 
-[Constraint: a rule the children inherit, and where it comes from. Only when real; usually absent.]
+[Constraint: a rule the children inherit, and where it comes from. A repo rule is a constraint only when the children would tempt breaking it; then one line names the rule and the temptation. Only when real.]
 
 Open
 - [Hat], [name]: [the decision]
   If wrong: [what breaks, for whom]
 
-One Outcome line stays; the others go. Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included.
+One Outcome line stays; the others go. Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included. Any other comment carries the source for what the description asserts; a section nothing in the description rests on is not written, and the description says where it went when it went somewhere.

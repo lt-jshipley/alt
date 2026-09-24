@@ -18,11 +18,11 @@ Read if present, ignore if absent: `.agentic/sources.md`, where this team's fact
 
 ## Homework
 
-Facts are looked up, never asked, and each is cited in a few words.
+Facts are looked up, never asked, and each is cited by path and a symbol, heading, or quoted phrase, never a bare line number.
 
 - tracker: the item by key, its full thread, and the parent the field names. A question the thread answered is not open. Never search by text; offer the duplicate search in one line and run it only on a yes.
 - code: the part the story names, one step out: what it calls, what calls it, the tests and fixtures beside it. Cases come from here; so do the numbers a check can run against.
-- docs: what covers that part, from the sources file and the item's links.
+- docs: what covers that part, from the sources file and the item's links, and what the product itself says about it.
 - people: never asked.
 
 ## Ask

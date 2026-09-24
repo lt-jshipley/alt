@@ -189,6 +189,33 @@ Agreed in conversation after the epic sources were read; decided alongside the e
 - Open gets an upward exit. When the Open questions are about the need, the outcome, or the why rather than the cases, the story says so in one line and routes them to the parent, or to "no parent" as triage's symptom. The fixture run's eleven Open items were this.
 - The epic body lists only the pieces with no story yet. The children with stories are the tracker's parent links, so Q11 is the source of truth for the index and the epic never restates it.
 
+## Field run, 2026-09-24
+
+The first run on real code: six stories written into leantechniques/agent-ready-assessment (#164 to #169) on 2026-09-23 and 24, each from a false or overstated finding on one client repo, with a tracker connection and the code beside it. Reviewed the next day by five independent Opus agents, one role each (implementing developer, test engineer, product owner, maintainer, story editor), plus the orchestrating session. Reports live in that repo at `.agentic/reviews/2026-09-24-story-review/`; the HANDOFF file there carries the story repairs, which are not this skill's concern.
+
+What held: one shape and one voice across all six; cases as condition to behaviour; checks naming the test class and fixture style; code pointing at the sibling to copy; research in a comment with the body standing alone; the goal sentence, which every reviewer used to judge the trade-offs a story made.
+
+What leaked, and the cause in the skill:
+- "Per the runner, 2026-09-23" written into a public tracker. The template's closing line read `per <who, date>` and the developer preset had no Runner hat. Fixed in 0.11.1.
+- "`./scripts/verify.sh` green" in six of six Checks and "per AGENTS.md" in four Constraints. The skill never said a repo-wide gate is not a check, and the Constraint bracket's "usually absent" says how often, not what disqualifies.
+- Line-number citations, correct on the day and drifting with the next merge. "Cited in a few words" said nothing about form.
+- Research comments pasted verbatim from a sub-agent, including sections no line of the body rests on. The skill defined one comment and was silent on others.
+- No slot for what describes the part being changed: the reference entry landed inside Checks, and the description the product shows for a check was left contradicting the new behaviour in three stories.
+- Not a placement fault but the largest finding: Checks named fixtures, seams, and "existing tests" that do not exist, and "dogfood passes" claims no test enforces. The homework says looked up and cited; nothing gates that the file was opened. Open, see below.
+- Nine "Unchanged." cases and five "Existing test." checks against "only where the behavior changes". Open.
+- Six parentless stories from one engagement, each re-arguing the need in an identical opener. The epic was never written. Open, with epic-refine.
+
+Reviewer agreement was the useful signal: five independent reads converged on the same handful of findings, and everything else appeared in one report only. A review is a generator, not a filter; act on what two or more hats raise.
+
+## Decided 2026-09-24
+
+- A gate the repo applies to every change is not a check. Written on the Checks bracket.
+- A repo rule is a constraint only when this story's change would tempt breaking it, and then one line names the rule and the temptation. Replaces "usually absent" on story and epic.
+- A citation is a path and a symbol, heading, or quoted phrase, never a bare line number; a line number only with the commit it was read at. Homework opener on story and epic, and the Code slot.
+- A comment carries the source for what the description asserts; a section nothing in the description rests on is not written, and the description says where it went when it went somewhere. Footer on story and epic. The test is "does the body rest on it", not "does the body repeat it": the download counts behind an allowlist pass, an industry survey does not.
+- A Docs slot after Code: what says what this part does today and changes with it, omitted when nothing does. A description string the product shows is code for the line test; the slot names what changes with the code.
+- Open: a gate that nothing named in a Check was written without the file opened; whether "Unchanged." earns one boundary line; the upward exit for the need itself when several stories come from one cause.
+
 ## To write
 
 - Summary.
