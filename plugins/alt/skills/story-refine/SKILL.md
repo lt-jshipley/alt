@@ -45,13 +45,13 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/story-refine/template.md` only now. Fill it, 
 
 Show:
 
-- On create: the title, the parent key or none, and the description.
+- On create: the title, the parent key or none, the keys it waits on, and the description.
 - On refine, item already in the shape: each section where the item and this run disagree, both sides quoted. An Open line the thread answered leaves Open and lands where its answer belongs.
 - On refine, item not in the shape: the new description; the original stays in the item's edit history.
 
 Then, in the room only, the Open lines that change what the person sees, since the story is not ready to pull until they close.
 
-Ask once whether to create or edit it. On yes, write the title and parent to their fields and the description as one block, through whatever tracker the session reaches. Report the key. Then stop.
+Ask once whether to create or edit it. On yes, write the title and parent to their fields, the description as one block, and each item this story waits on as the tracker's dependency relation, through whatever tracker the session reaches. A dependency the relation cannot hold, a pull request or a branch, is said in the room and written nowhere. Report the key. Then stop.
 
 ## Rules
 

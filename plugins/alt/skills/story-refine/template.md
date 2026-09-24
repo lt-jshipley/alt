@@ -20,6 +20,4 @@ Open
 - [Role], [@name or unassigned]: [the question, as an input with an unknown outcome where one exists]. If wrong: [what breaks, for whom].
   [At most three. Closed before pickup; each answer becomes a criterion, an example, or a Decided line.]
 
-Depends on: [keys, one line, or omitted; never the state of a pull request or a branch]
-
 Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included. The body is about 350 words. Nothing in the story says how: no file, symbol, helper, sibling, fixture, test name, or path. Nothing sits beside the story: no comment carries what the description rests on, and a fact the builder can look up is not written down.
