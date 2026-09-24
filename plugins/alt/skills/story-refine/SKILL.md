@@ -49,6 +49,7 @@ Ask once whether to create or edit it. On yes, write the title and parent to the
 - A line already in the item stays unless the runner says otherwise.
 - Never a metric, a size, a priority, a status, or a readiness verdict on the story.
 - Never starts the work, never edits code, never enters plan mode.
+- Written outside the session, to a tracker item, a comment, or a message, a person is a name or handle and a role is the preset's word. The words the skills use for their own mechanics, runner, room, seat, hat, wound, shape, the record, never appear there.
 - Non-interactive: every root lands under Open; show the draft and stop; the write needs the runner present.
 
 ## When something is missing, say so in one line

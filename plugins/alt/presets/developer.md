@@ -1,5 +1,8 @@
 # alt preset: developer
 
+## Runner hat
+Developer: the person running the skill, written by name or handle.
+
 ## Hats
 Implementation Dev, Tech Leadership, Business, UX. Name any other as a guess.
 

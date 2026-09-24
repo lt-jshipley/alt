@@ -1,4 +1,4 @@
-Triage: [the scope as the runner named it]. Read [n] items in full; [m] older, untouched since [date], counted and not read.
+Triage: [the scope as it was named]. Read [n] items in full; [m] older, untouched since [date], counted and not read.
 
 Wounds
 - [The mechanism, one sentence: what is happening, why it persists, and what it costs while it does]. Dissolves [k]: [keys].

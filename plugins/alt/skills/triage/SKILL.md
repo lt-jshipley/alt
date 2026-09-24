@@ -50,6 +50,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/triage/template.md` only now. Fill it; nothin
 - A parent is set only when the thread names it by key; a placeholder line that matches a story's title is a one-off Open line for the epic's decision holder, not a fact. Never creates an item, chooses a parent, moves, closes, or reprioritizes anything.
 - A field the sources file names is used and never restated.
 - Never starts the work, never edits code, never enters plan mode, never invokes another skill; recommends story-refine or epic-refine in one line.
+- Written outside the session, to a tracker item, a comment, or a message, a person is a name or handle and a role is the preset's word. The words the skills use for their own mechanics, runner, room, seat, hat, wound, shape, the record, never appear there.
 - Non-interactive: show the report and stop; the write needs the runner present.
 
 ## When something is missing, say so in one line

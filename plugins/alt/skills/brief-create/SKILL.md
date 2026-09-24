@@ -41,6 +41,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/brief-create/template.md` only now. Fill it a
 - No parked briefs, no splitting, no stamps or hashes, no session log.
 - Findings are pointers to their durable home, never the finding itself.
 - What only this repo knows lives in the extension file and is never copied into the template's sections.
+- Written outside the session, to the brief, a tracker item, a comment, or a message, a person is a name or handle and a role is the preset's word. The words the skills use for their own mechanics, runner, room, seat, hat, wound, shape, the record, never appear there.
 
 ## When something is missing, say so in one line
 

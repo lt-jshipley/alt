@@ -9,13 +9,13 @@ Cases
 Checks ([where the data lives: fixtures, sandbox values])
 - [input] → [observable result]. One per claim that could be wrong, runnable as written.
 
-[Constraint: a rule no case or check would surface, and where it comes from; "the parent" when the epic carries it. Only when real; usually absent.]
+[Constraint: a rule no case or check would surface, and where it comes from: a doc by path, "the parent" when the epic carries it, or a person by name and date. Only when real; usually absent.]
 
 Open
 - Split? [the part that is not ready]
 - Parent: [the questions below are about the need, the outcome, or the why; they belong on the epic, or on no epic yet]
-- [Hat]: [the question]
+- [Hat], [name]: [the question]
   If wrong: [what breaks, for whom]
 
 Code: [paths to start reading]
-Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included. An answered Open line leaves as one comment: `Closed from Open: <the question> <the answer>, per <who, date>.`
+Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included. An answered Open line leaves as one comment: `Closed from Open: <the question> <the answer>, per <name>, <date>.`
