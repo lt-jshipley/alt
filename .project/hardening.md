@@ -33,7 +33,7 @@ On a client
 - [ ] Run epic-refine on a real epic with children
 - [ ] Run triage on a real board or epic scope
 - [ ] Fill the run log for each
-- Notes: first real-code run 2026-09-24, six story-refine stories in agent-ready-assessment, reviewed by five role agents rather than run-logged; findings and the template changes in `story.md`, Field run. The run-log template is still unwritten.
+- Notes: first real-code run 2026-09-24, six story-refine stories in agent-ready-assessment, reviewed by five role agents rather than run-logged; findings and the template changes in `story.md`, Field run. The run-log template is still unwritten. A second read the same day, five hats scoring implementation presence, drove 0.12.0; see `story.md`, Decided 2026-09-24, the how.
 
 ### 2. Examine floods empty rooms (value 4)
 Story fixture: eleven Open lines against four cases. Epic fixture: six. Every skill invokes examine, so the defect multiplies and the Open section is the suite's first impression. Likely small: a cap, or a collapse of "facts not reachable" into one line when no code or tracker is present.

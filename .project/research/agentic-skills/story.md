@@ -216,6 +216,19 @@ Reviewer agreement was the useful signal: five independent reads converged on th
 - A Docs slot after Code: what says what this part does today and changes with it, omitted when nothing does. A description string the product shows is code for the line test; the slot names what changes with the code.
 - Open: a gate that nothing named in a Check was written without the file opened; whether "Unchanged." earns one boundary line; the upward exit for the need itself when several stories come from one cause.
 
+## Decided 2026-09-24, the how
+
+A five-hat board (senior developer, junior developer, coding agent, tech lead, product owner) scored #164 to #170 for implementation presence, 1 to 5; every opener scored 1, Checks 3 to 4 everywhere, Code 3 to 4 except the two smallest stories, and #170, the 0.11.2 template's own output, scored higher than the #167 it duplicated. Reports and synthesis in agent-ready-assessment at `.agentic/reviews/2026-09-24-implementation-board/`. The research already said it: intent with latitude, never how; the recipe is the first thing a story never carries. The line test had been read as "says how to change the code."
+
+- The Code section is removed. It did three jobs: locate, which the check id and the product strings in Cases already do; scope, which is the builder's first design decision and the writer pre-empted from a partial view (#164's fix may belong in the scorer, #166's sibling sat in a project the check cannot reference); and anchor attention, which was the harm, since a confidently named helper removes the doubt that makes a builder or an agent open the code. Half the siblings named this week were the wrong shape and no reader caught one. A codebase that needs a pointer per story to be navigable has a documentation gap in the codebase, not in the story.
+- This reverses 0.11.2's Code bracket, "each with a symbol, heading, or quoted phrase", which made Code worse the same day it landed. The citation form stays for facts cited in the room and in comments.
+- Product copy survives, in Cases: every string the product shows that the change touches, as final wording, and one line for the strings it leaves alone when a reader would wonder. This also settles the "Unchanged." question: one boundary line, never nine.
+- Checks are demonstrations at the product boundary, one per claim, runnable in front of the team, never the test that proves them. The product owner's demo rewrite kept 22 of 78 lines; the rest were fixture permutations, good tests, and the builder's to choose.
+- Evidence is the observation that prompted the story, in the words of whoever saw it, in the opener. The homework's technical facts shape the cases and stay in the session; a comment only for provenance a reader might dispute.
+- A cross-story contract is an architecture artifact: an ADR, the parent's Constraint, or a tracker relation. The story cites it and never restates it. The #165 and #168 "one shared map" lived in two stories that drifted the same day; that is the missing epic showing up as a constraint.
+- A fixed closing sentence in every story: "If the code contradicts a line above, the line missed the need. Work out what the need requires, alone, with an agent, or with the team, before building." Not "stop and say which line": a contradiction is the story's miss and a return to the value, whoever does the returning.
+- Line test amended: every line says what the system will do for whom, proves it where the person sees it, or stops a guess; none says how.
+
 ## Verification runs, 2026-09-24
 
 alt 0.11.2, the runner present, tracker reached through `gh`, both in agent-ready-assessment.
@@ -227,6 +240,7 @@ Read: the four bracket tests hold on first contact with real code. Kind C ("Unch
 
 ## To write
 
+- Whether triage should flag a contract that exists only inside two stories.
 - Summary.
 - The problem the skill solves, and for whom.
 - Relationship to epic, where outcome and assumptions went.

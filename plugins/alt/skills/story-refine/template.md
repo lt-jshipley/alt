@@ -1,15 +1,16 @@
 [Title: a verb phrase saying what the system will do]                    [Parent key, or none]
 
-[One to three sentences: the role, what they can do once this lands, what is broken today, and the stake. Whose need it is lives here, never in a field.]
+[One to three sentences: the role, what they can do once this lands, what is broken today as it was seen (the report, the repo, the date), and the stake. Whose need it is lives here, never in a field.]
 [The goal behind the feature, in one sentence, so polish and the point are told apart. Only on a story with no parent; a parented story reads it from the epic.]
 
 Cases
-- [condition]: [expected behavior]. Only where the behavior changes.
+- [condition]: [what the person sees]. Every string the product shows that this change touches, as final wording. Never the mechanism.
+- [The strings this change leaves alone, in one line. Only when a reader would wonder.]
 
-Checks ([where the data lives: fixtures, sandbox values])
-- [input] → [observable result]. One per claim that could be wrong, runnable as written. A gate the repo applies to every change is not a check.
+Checks ([where the data lives: a repo shape, a sandbox value])
+- [input] → [what the report or CLI shows]. One per claim that could be wrong, a demonstration someone could run in front of the team. Never the test that proves it. A gate the repo applies to every change is not a check.
 
-[Constraint: a rule no case or check would surface, and where it comes from: a doc by path, "the parent" when the epic carries it, or a person by name and date. A repo rule is a constraint only when this story's change would tempt breaking it; then one line names the rule and the temptation. Only when real.]
+[Constraint: a limit no case or check would surface, stated as the outcome it protects, and where it comes from: "the parent", an ADR, or a person by name and date. A repo rule is a constraint only when this story's change would tempt breaking it; then one line names the rule and the temptation. A rule shared with another story lives on the parent or in an ADR and is cited, never restated. Only when real.]
 
 Open
 - Split? [the part that is not ready]
@@ -17,6 +18,8 @@ Open
 - [Hat], [name]: [the question]
   If wrong: [what breaks, for whom]
 
-Code: [paths to start reading, each with a symbol, heading, or quoted phrase; a line number only with the commit it was read at]
-Docs: [what says what this part does today and changes with it: a reference entry, a description the product shows, a README line. Omitted when nothing does.]
-Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included. An answered Open line leaves as one comment: `Closed from Open: <the question> <the answer>, per <name>, <date>.` Any other comment carries the source for what the description asserts; a section nothing in the description rests on is not written, and the description says where it went when it went somewhere.
+Docs: [what the reference entry must say once this lands. Product strings are Cases. Omitted when nothing changes.]
+
+If the code contradicts a line above, the line missed the need. Work out what the need requires, alone, with an agent, or with the team, before building.
+
+Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included. The last sentence is written as is. Nothing in the story says how: no file, symbol, helper, sibling, fixture, or test name; a path appears only as the source of a constraint. An answered Open line leaves as one comment: `Closed from Open: <the question> <the answer>, per <name>, <date>.` Any other comment carries the source for what the description asserts and a reader might dispute; a section nothing in the description rests on is not written, and the description says where it went when it went somewhere.
