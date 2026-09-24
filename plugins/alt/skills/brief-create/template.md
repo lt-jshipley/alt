@@ -24,7 +24,7 @@ Load this brief, read the current phase's Load line, take the first unchecked it
 - [what must stay true]
 
 ## Open Questions
-[Written by examine. One line per question: the decision, its disposition, its if-wrong.]
+[From decisions. One line per question: the decision, its hat, its if-wrong.]
 
 ## Findings
 [Pointers only: a path or link, and why it matters. Never the finding itself.]

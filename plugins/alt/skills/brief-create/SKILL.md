@@ -1,6 +1,6 @@
 ---
 name: brief-create
-description: Creates a brief, the personal working file that carries one piece of work across sessions, at .agentic/briefs/<name>.md, through a short interview, then examine, then the file. Creates only and never starts the work. Use when the user wants a brief or invokes /alt:brief-create.
+description: Creates a brief, the personal working file that carries one piece of work across sessions, at .agentic/briefs/<name>.md, through a short interview, then decisions, then the file. Creates only and never starts the work. Use when the user wants a brief or invokes /alt:brief-create.
 argument-hint: [preset] [short name or the idea]
 ---
 
@@ -26,9 +26,9 @@ One brief per piece of work, as many briefs as there is work. Never a brief abou
 
 One question a turn, and only for what the room, the record, and the code do not answer. Facts are looked up and cited in a few words. In order: goal, problem, who this is for and what changes for them, how we would know, done when, constraints, story, branches. Then propose the phases as units of change grouped in dependency order, from what was said and what the code shows, and let the runner adjust. Stop asking when every section can be filled.
 
-## Then examine
+## Then decisions
 
-Invoke `alt:examine` against the drafted answers. Its Decided list folds into the sections above. Its team bullets and anything still open go under Open Questions with their if-wrong lines. If examine did not load, Open Questions reads `examine did not run; run /alt:examine on this brief` and the closing line says so.
+Invoke `alt:decisions` against the drafted answers. Ask the runner each root, one a turn. An answer folds into the sections above; `team` or no answer lands under Open Questions as one line with its hat and if-wrong, the Dissolves sub-lines dropped. If decisions did not load, Open Questions reads `decisions did not run; run /alt:decisions on this brief` and the closing line says so.
 
 ## Write
 
@@ -46,6 +46,6 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/brief-create/template.md` only now. Fill it a
 
 - Preset cannot be read: ask which kind of work this is.
 - Extension file absent: developer, and the template's generic close item.
-- examine did not load: the placeholder, and say so.
+- decisions did not load: the placeholder, and say so.
 - Ignore check fails: stop and name the line to add.
 - No git: write, and Branches reads none.

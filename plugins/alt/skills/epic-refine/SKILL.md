@@ -30,9 +30,9 @@ Facts are looked up, never asked, and each is cited in a few words.
 
 One question a turn, only for what the room, the thread, and the sources do not answer. In order: what the people who asked for this would do once it lands, and what it would do for the business; who they are, plural and specific; who holds the need, the measure, and the decisions; the target, asked of whoever holds the measure. A feature is converted by the first question, never carried as the need. Stop asking when the shape can be filled.
 
-## Then examine
+## Then decisions
 
-Invoke `alt:examine` against the draft. Its Decided list folds into the Bet, the Not line, and the constraint. Its team bullets go under Open with their hats, names, and if-wrong lines. If examine did not load, Open reads `examine did not run; run /alt:examine on this epic` and the closing line says so.
+Invoke `alt:decisions` against the draft. Ask the runner each root, one a turn. An answer folds into the Bet, the Not line, and the constraint; `team` or no answer lands under Open with its hat, name when known, and if-wrong line. If decisions did not load, Open reads `decisions did not run; run /alt:decisions on this epic` and the closing line says so.
 
 ## Show, then write
 
@@ -53,7 +53,7 @@ Ask once whether to create or edit it. On yes, write the title and parent to the
 - Never creates, edits, links, or moves a child.
 - A field the sources file names is used and never restated in the description.
 - Never starts the work, never edits code, never enters plan mode.
-- Non-interactive: show the draft and stop; the write needs the runner present.
+- Non-interactive: every root lands under Open; show the draft and stop; the write needs the runner present.
 
 ## When something is missing, say so in one line
 

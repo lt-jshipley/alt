@@ -29,9 +29,9 @@ Facts are looked up, never asked, and each is cited in a few words.
 
 One question a turn, only for what the room, the thread, and the code do not answer. In order: whose need this is and what they can do once it lands, what is broken today and the stake, the goal behind the feature when there is no parent to read it from, the cases that change what gets built, the check for each claim that could be wrong, any constraint no case would surface. Stop asking when the shape can be filled. A check with no data to run it is an Open line, not a question.
 
-## Then examine
+## Then decisions
 
-Invoke `alt:examine` against the draft. Its Decided list folds into cases, checks, and constraints. Its team bullets go under Open with their hats and if-wrong lines. When those bullets are about the need, the outcome, or the why rather than the cases, one `Parent:` line under Open says so and names the parent key or `none`; they are the epic's questions surfacing here. If examine did not load, Open reads `examine did not run; run /alt:examine on this story` and the closing line says so.
+Invoke `alt:decisions` against the draft. Ask the runner each root, one a turn. An answer folds into cases, checks, and constraints; `team` or no answer lands under Open with its hat and if-wrong line. When those lines are about the need, the outcome, or the why rather than the cases, one `Parent:` line under Open says so and names the parent key or `none`; they are the epic's questions surfacing here. If decisions did not load, Open reads `decisions did not run; run /alt:decisions on this story` and the closing line says so.
 
 ## Show, then write
 
@@ -49,7 +49,7 @@ Ask once whether to create or edit it. On yes, write the title and parent to the
 - A line already in the item stays unless the runner says otherwise.
 - Never a metric, a size, a priority, a status, or a readiness verdict on the story.
 - Never starts the work, never edits code, never enters plan mode.
-- Non-interactive: show the draft and stop; the write needs the runner present.
+- Non-interactive: every root lands under Open; show the draft and stop; the write needs the runner present.
 
 ## When something is missing, say so in one line
 
@@ -57,5 +57,5 @@ Ask once whether to create or edit it. On yes, write the title and parent to the
 - Key given, no tracker connection: create from what is in the room; the key is carried, the item unread.
 - No tracker reachable at write time: the description in the room as markdown, and say the write was skipped.
 - Item already complete: nothing to do.
-- examine did not load: the placeholder, and say so.
+- decisions did not load: the placeholder, and say so.
 - Preset is business or research: developer work only, for now.

@@ -37,10 +37,10 @@ On a client
 
 ### 2. Examine floods empty rooms (value 4)
 Story fixture: eleven Open lines against four cases. Epic fixture: six. Every skill invokes examine, so the defect multiplies and the Open section is the suite's first impression. Likely small: a cap, or a collapse of "facts not reachable" into one line when no code or tracker is present.
-- [ ] Decide the mechanism: cap, collapse, or skip examine when the room is empty
-- [ ] Change examine or the callers accordingly
-- [ ] Re-run the story and epic fixtures and compare Open counts
-- Notes:
+- [x] Decide the mechanism. 2026-09-22: the flood was a coupling, not tuning. Examine is a junior's interview; the callers only need the decision list. New skill `alt:decisions` carries the method without the interview, roots only, facts collapsed to one Not reachable line. Examine untouched.
+- [x] Point story-refine, epic-refine, and brief-create at decisions
+- [x] Re-run the fixtures. 2026-09-22: story nine against eleven, epic seven against six. Structural leaks gone; empty-room count is inherent. Findings and proposed caller fixes in decisions.md. Interactive case untested.
+- Notes: research in `.project/research/agentic-skills/decisions.md`. Watch whether callers need to re-invoke when a runner's answer brings Dissolves children onto the frontier.
 
 ### 3. Private dialect (value 4)
 Runner, room, seat, hat, wound, shape, the record. Blocks marketplace adoption and is a model-correctness risk since these words carry no priors. Does not affect whether the skills work for the author today.

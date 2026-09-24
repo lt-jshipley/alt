@@ -17,7 +17,7 @@ In our other repos and one public one, read 2026-09-09: `~/Development/agentic-t
 
 Considered and not listed: Accelerate, Inspired, Lean UX, The Lean Product Playbook, The Lean Startup, The Product-Minded Engineer, Thinking in Systems. Their opinions land on story or triage. The Design of Everyday Things and The Startup Way are not about these artifacts.
 
-Related in this repo: `story.md` and `triage.md`, the artifacts below and beside this one. `grill-me.md`, examine's wound: a premise the seed gets wrong or a decision it never made, which is most often an epic-level gap surfacing in a story. `orient.md`, how a skill learns what kind of project this is and where its facts live. `brief.md`, the unit of work an epic is broken into.
+Related in this repo: `story.md` and `triage.md`, the artifacts below and beside this one. `grill-me.md`, examine's wound: a premise the seed gets wrong or a decision it never made, which is most often an epic-level gap surfacing in a story. `decisions.md`, the skill that now surfaces those decisions for the refine skills in examine's place, 2026-09-22. `orient.md`, how a skill learns what kind of project this is and where its facts live. `brief.md`, the unit of work an epic is broken into.
 
 ## Reading plan, 2026-09-18
 
