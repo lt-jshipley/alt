@@ -18,7 +18,7 @@ Read if present, ignore if absent: `.agentic/sources.md`, where this team's fact
 
 ## Homework
 
-Facts are looked up, never asked, and each is cited by path and a symbol, heading, or quoted phrase, never a bare line number.
+Facts are looked up, never asked, and each is cited in the room by path and a symbol, heading, or quoted phrase, never a bare line number. That form is for the room; nothing written to the tracker cites a source file.
 
 - tracker: the item by key, its full thread, and the parent the field names. A question the thread answered is not open. Never search by text; offer the duplicate search in one line and run it only on a yes.
 - code: the part the story names, one step out: what it calls, what calls it, the tests and fixtures beside it. Cases come from here; so do the numbers a check can run against.
