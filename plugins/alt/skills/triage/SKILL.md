@@ -29,7 +29,7 @@ Facts are looked up, never asked, and each is cited in a few words. Declare the 
 
 ## Sort
 
-Symptoms are what story-refine and epic-refine leave on the record on purpose: a story with no parent; a story whose Open routes to `Parent: none`; an epic unmeasured with children in progress; a title-only epic with children; a child whose title does not serve its epic's need; an Open line untouched for the window; a `Not yet a story` piece that has a child; a description its thread contradicts. Each is sorted once.
+Symptoms are what story-create and epic-refine leave on the record on purpose: a story with no parent; a story whose Open routes to `Parent: none`; an epic unmeasured with children in progress; a title-only epic with children; a child whose title does not serve its epic's need; an Open line untouched for the window; a `Not yet a story` piece that has a child; a description its thread contradicts. Each is sorted once.
 
 - **A fact.** The record settles it: a parent the thread names by key, a baseline the thread or the measures seat holds, an Open line the thread answered, a `Not yet a story` piece whose story is already the epic's child. It becomes a fix, one edit, in the sibling's shape. However many there are, facts are never a wound.
 - **A wound.** Symptoms across items sharing one cause that is a decision nobody holds: a need, a measure, or what hangs under what. One Open line on the shared parent, holder's hat and name, if-wrong, the symptoms as evidence. Wounds are ordered by how many symptoms each dissolves.
@@ -49,7 +49,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/triage/template.md` only now. Fill it; nothin
 - A line already in an item stays. An Open line triage wrote before and still open is not written again; one the thread has since answered is a fix.
 - A parent is set only when the thread names it by key; a placeholder line that matches a story's title is a one-off Open line for the epic's decision holder, not a fact. Never creates an item, chooses a parent, moves, closes, or reprioritizes anything.
 - A field the sources file names is used and never restated.
-- Never starts the work, never edits code, never enters plan mode, never invokes another skill; recommends story-refine or epic-refine in one line.
+- Never starts the work, never edits code, never enters plan mode, never invokes another skill; recommends story-create or epic-refine in one line.
 - Written outside the session, to a tracker item, a comment, or a message, a person is a name or handle and a role is the preset's word. The words the skills use for their own mechanics, runner, room, seat, hat, wound, shape, the record, never appear there.
 - Non-interactive: show the report and stop; the write needs the runner present.
 

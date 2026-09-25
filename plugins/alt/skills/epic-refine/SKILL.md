@@ -60,7 +60,7 @@ Ask once whether to create or edit it. On yes, write the title and parent to the
 
 - Nothing in the room: ask what the need is, once.
 - Title only, no children: write the need if the room has it, else nothing to do.
-- Small enough to be a story: say so, name story-refine, stop.
+- Small enough to be a story: say so, name story-create, stop.
 - A level above the epic: say so, stop.
 - Key given, no tracker connection: create from what is in the room; the key is carried, the item unread.
 - No tracker reachable at write time: the description in the room as markdown, and say the write was skipped.

@@ -20,6 +20,6 @@ Holding
 
 Next
 - /alt:epic-refine [key]: [why, one clause]
-- /alt:story-refine [key]: [why, one clause]
+- /alt:story-create [key]: [why, one clause]
 
 Wounds are ordered by how many symptoms each dissolves. Lines left in brackets are removed, not written. Sections with nothing in them are omitted, headings included. The Open line under a wound is written to the item exactly as shown.

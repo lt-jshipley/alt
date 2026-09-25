@@ -8,9 +8,9 @@ We maintain the `alt:story-create` and `alt:story-review` skills, which live in 
 
 ## State
 
-- alt is at 0.15.2. If `git status` in the alt repo shows uncommitted changes, commit and push them first, then run `/plugin update` and `/reload-plugins` and confirm `~/.claude/plugins/cache/agentic-leantechniques/alt/` has a `0.15.2` folder holding `skills/story-review/SKILL.md`.
+- alt is at 0.16.0. If `git status` in the alt repo shows uncommitted changes, commit and push them first, then run `/plugin update` and `/reload-plugins` and confirm `~/.claude/plugins/cache/agentic-leantechniques/alt/` has a `0.16.0` folder holding `skills/story-review/SKILL.md`.
 - story-create runs story-review in a fresh sub-agent before the write, hands it the product words the draft uses, and shows its Changed and Could not fix lines beside the draft. The five Before-showing questions live in story-review. The reviewer never changes a quoted string, drops a Decided reason the seed does not hold, carries a fix to every line that makes the same claim, and does not treat a raised question as an assigned one.
-- `alt:story-refine` is retired in place. Do not edit it or run it. It goes when the builder's pass exists.
+- `alt:story-refine` is archived at `.project/archive/skills/story-refine/` in the alt repo, outside the plugin, so Claude Code never loads it. Do not run it. Its code homework, decisions step, sweep, and data-table rule are the builder's pass, not yet built.
 - The Northwind transcript is the fenced block under "Test case" in story-concept.md, and a verbatim copy sits at `corpus/synthetic/northwind-seed.md` beside this file. Copy it to a scratchpad file named `northwind.md`.
 - Round five (0.14.5, ten Sonnet runs, before story-review) scored 10 to 19 on the value ranking below. The first smoke (0.15.0, three runs) summed 15 to 17; the second (0.15.2, five runs) summed 14 to 18, mean 16.8, check.py silent everywhere. A composition run over three drafts scored 18 and was not worth four runs; its dropped list produced the 0.15.2 edits. The ten-run gate is retired. Two things measure the skills now: a smoke after any skill edit, and the corpus of client uses.
 - Two blind spots are logged and not fixed: the review cannot see a missing Open line, and "every Sub-Score" survives when the seed says "the grade". Each appeared once or twice; the rule for an edit is two or more across smoke runs or corpus entries.
@@ -72,7 +72,7 @@ Read every draft as the product owner who would sign it and the builder who woul
 - 2: template text echoed into the story, or the shape drifted toward a ticket.
 - 1: not in the shape.
 
-Then run `python3 <cache>/0.15.2/skills/story-create/scripts/check.py` on every final draft and record what it prints. Record per run: words, number of passes, what the first pass printed, and the number of Changed lines story-review returned.
+Then run `python3 <cache>/0.16.0/skills/story-create/scripts/check.py` on every final draft and record what it prints. Record per run: words, number of passes, what the first pass printed, and the number of Changed lines story-review returned.
 
 ## Report back
 

@@ -27,9 +27,9 @@ Decide now, no work
 Every skill has one or two headless fixture runs with no tracker, no code, and no team. The README's "proven useful more than once" is true of the approach, not yet of these skills. Two or three client runs de-risk every other item here.
 Now
 - [ ] Write the run-log template: what held, what drifted, ignored or misread clauses, Open line count, minutes spent
-- [ ] Dogfood: create GitHub Issues in this repo from the roadmap and this file, run sources-sync, then story-refine, epic-refine, and triage against them; log each
+- [ ] Dogfood: create GitHub Issues in this repo from the roadmap and this file, run sources-sync, then story-create, epic-refine, and triage against them; log each
 On a client
-- [ ] Run story-refine on a real tracker item in a real repo
+- [ ] Run story-create on a real tracker item in a real repo
 - [ ] Run epic-refine on a real epic with children
 - [ ] Run triage on a real board or epic scope
 - [ ] Fill the run log for each
