@@ -27,11 +27,11 @@ The homework shapes the story; none of it is written into the story or beside it
 
 ## Ask
 
-One question a turn, only for what the room and the thread do not answer. In order: whose need this is, the person the product serves, and what they stop or start doing once it lands; what was seen, when, and in what words; the rules the product owner would reject the work over; the example at each edge the rules leave open; a choice made on the way and why. Stop asking when the shape can be filled. A question with nobody in the room to answer it is an Open line, not a question. A claim the thread leaves unchecked is an Open line, not an example. A way of building that someone in the thread proposed is a question, not a rule, however settled it sounded. With no parent, offer `alt:epic-refine` once before the write; a decline leaves the parent field empty with nothing said about why.
+One question a turn, only for what the room and the thread do not answer. In order: whose need this is, the person the product serves, and what they stop or start doing once it lands; what was seen, when, and in what words; the rules the product owner would reject the work over; the example at each edge the rules leave open; a choice made on the way and why. Stop asking when the shape can be filled. A question with nobody in the room to answer it is an Open line, not a question. A claim the thread leaves unchecked is an Open line, not an example. A way of building that someone in the thread proposed, or described as how it works today, is a question, not a rule, however settled it sounded. With no parent, offer `alt:epic-refine` once before the write; a decline leaves the parent field empty with nothing said about why.
 
 ## Fill
 
-Read `${CLAUDE_PLUGIN_ROOT}/skills/story-create/template.md` only now and fill it. Each list section holds three lines. The incident is the first example; a line where two rules meet comes before one that restates a rule. A fourth line in any section is offered to the runner in one line with what it protects, written on a yes, dropped otherwise. A section that wants a fifth is a story that wants splitting, and the split is named in the room.
+Read `${CLAUDE_PLUGIN_ROOT}/skills/story-create/template.md` only now and fill it. The incident is the first example; a line where two rules meet comes before one that restates a rule. A fourth line in any section is offered to the runner in one line with what it protects, written on a yes, dropped otherwise. A section that wants a fifth is a story that wants splitting, and the split is named in the room.
 
 ## Before showing
 
