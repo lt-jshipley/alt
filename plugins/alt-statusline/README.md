@@ -56,14 +56,14 @@ To keep the gauge but skip the per-turn model call in one project, set
 
 ```
 Fable 5 · high | context-health-monitor ⚠ main +2 !3 ?1 ↑2        ← identity: model · effort | git
-Session: Stable | 12% used (24k) | topics:2 · resolved concepts:4 · loose ends:1 · cli tool fails:1/31   ← the gauge
+Session: Stable | 12% used (24k) | topics:2 · resolved concepts:4 · loose ends:1 · ai misunderstandings:0 · cli tool fails:1/31   ← the gauge
 Topics: billing-proration:4 | invoice-tests:1                     ← judge's topic tags (session mention counts)
 ```
 
 At red, the label is itself the call to action:
 
 ```
-Session: Restart Recommended | 42% used (84k) | corrections:2 · compactions:1
+Session: Restart Recommended | 42% used (84k) | topics:3 · resolved concepts:2 · loose ends:1 · ai misunderstandings:2 · cli tool fails:0/58 · compactions:1
 ```
 
 Chips wear the grade color when they contributed to it; healthy chips stay
@@ -92,7 +92,7 @@ Degrading informs, never nags.
 | Topics | judge, per-session vocabulary | 5+ distinct in one session | — |
 | Loose ends (open loops) | judge; age-gated — a loose end only counts once unresolved 3+ turns | 2+ stale | 3+ stale |
 | Tool failures | counters (event identity only) | ≥5 failures at ≥10% of calls, or ≥15 total, or 4+ consecutive, or 3 inside 2 minutes — at most one elevation, whichever is most specific | — |
-| User corrections | judge; repeats matched against prior corrections | 2+ in the session | same issue corrected 3+ times (Anthropic's clear-and-restart rule) |
+| AI misunderstandings (user corrections) | judge; repeats matched against prior corrections | 2+ in the session | same issue corrected 3+ times (Anthropic's clear-and-restart rule) |
 | Compactions | SessionStart(compact) counter | — | any compaction |
 | Context window | statusline sidecar | ≥25% full | ≥40% full |
 | Monitor health | schema drift or judge error | degraded monitor elevates — the gauge fails loud, never as silent healthy zeros | — |
