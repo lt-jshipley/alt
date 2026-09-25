@@ -16,7 +16,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/story-create/template.md` for the shape.
 
 ## Four questions
 
-Read the draft once per question. Each names what to fix; fix it in place.
+Read the draft once per question. Each names what to fix; fix it in place, and carry the fix to every line that repeats the words.
 
 **Value.** What this story would cause to be built, against what the seed wanted.
 - Does the first sentence name whose need this is, the person the product serves, in their words when the seed has them? Otherwise rewrite it from the seed's words.
@@ -60,6 +60,7 @@ Changed holds one line per edit and nothing else. Could not fix is omitted when 
 ## Rules
 
 - Edits only what a question names. Never rewrites for style, never adds a fact the seed does not hold, never adds a line to fill a section.
+- Never changes a quoted string. A headline it doubts goes under Could not fix.
 - Never reads code, tests, docs, or the tracker. Never asks anyone anything.
 - Never writes the story to a tracker or to any file other than the draft it was given.
 - Never starts the work, never enters plan mode.
