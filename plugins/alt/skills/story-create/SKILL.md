@@ -35,7 +35,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/story-create/template.md` only now and fill i
 
 ## Before showing
 
-Write the draft to a file under the session's scratch space and run `python3 ${CLAUDE_PLUGIN_ROOT}/skills/story-create/scripts/check.py <file>`. Fix each line it prints and run it again. Then send the draft and the seed to a sub-agent that has read neither, with one instruction: invoke `alt:story-review` against them. Take its edited draft as the draft. Its Changed and Could not fix lines are shown beside the draft; a Could not fix line the runner cannot settle becomes an Open line.
+Write the draft to a file under the session's scratch space and run `python3 ${CLAUDE_PLUGIN_ROOT}/skills/story-create/scripts/check.py <file>`. Fix each line it prints and run it again. Then send the draft and the seed to a sub-agent that has read neither, with one instruction: invoke `alt:story-review` against them, and a list of the product's words the draft uses, the headline fields and the terms the product's own file defines, which the review never cuts for being absent from the seed. Take its edited draft as the draft. Its Changed and Could not fix lines are shown beside the draft; a Could not fix line the runner cannot settle becomes an Open line.
 
 ## Show, then write
 

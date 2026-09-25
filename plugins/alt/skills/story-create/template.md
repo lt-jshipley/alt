@@ -10,7 +10,7 @@
 - [What is present and absent in the input, in the thread's own words; nothing named that the thread did not name] → [what the person sees]. The reported incident first, then one where two rules meet. Never an outcome an Open line still asks about.
 
 **Decided**
-- [What was not done, and why. A line that starts with what was done is a criterion or an example, wherever it began. The thread holds who said it.]
+- [What was not done, and why, in the thread's words. A line that starts with what was done is a criterion or an example, wherever it began. The thread holds who said it.]
 
 **Open**
 - [@name, or the role that answers it in plain words]: [the question, as an input with an unknown outcome where one exists]. If wrong: [what breaks, for whom].

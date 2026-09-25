@@ -1,7 +1,7 @@
 {
   "name": "alt",
   "displayName": "alt",
-  "version": "0.15.1",
+  "version": "0.15.2",
   "description": "Agentic Lean Techniques: skills, agents, and hooks that have proven useful across client work.",
   "author": {
     "name": "Lean Techniques",

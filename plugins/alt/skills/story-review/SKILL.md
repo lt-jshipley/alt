@@ -10,17 +10,18 @@ A draft written by one head carries that head's solution. This skill reads it wi
 
 ## Inputs
 
-$ARGUMENTS names the draft and the seed: a file path each, or the draft pasted with the seed beside it. Read both in full before anything else. The seed is the record of what the room said; read nothing else. Code, tests, docs, and the tracker belong to the writer's homework and the builder's pass, not to this one.
+$ARGUMENTS names the draft and the seed: a file path each, or the draft pasted with the seed beside it, and may carry a list of the product's words. Read the draft and the seed in full before anything else. A word on the product list is the product's, not the seed's, and is never cut for being absent from the seed. The seed is the record of what the room said; read nothing else. Code, tests, docs, and the tracker belong to the writer's homework and the builder's pass, not to this one.
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/story-create/template.md` for the shape.
 
 ## Four questions
 
-Read the draft once per question. Each names what to fix; fix it in place, and carry the fix to every line that repeats the words.
+Read the draft once per question. Each names what to fix; fix it in place, and carry the fix to every line that makes the same claim.
 
 **Value.** What this story would cause to be built, against what the seed wanted.
 - Does the first sentence name whose need this is, the person the product serves, in their words when the seed has them? Otherwise rewrite it from the seed's words.
 - Is every choice the seed made recorded under Decided, including a proposal someone turned down and why? A missing one is added with its reason from the seed.
+- Does any Decided line give a reason the seed does not hold? The reason goes; the line stays if the seed holds the choice.
 - Is there a case in the seed where two criteria apply to the same thing? If it is not an Example, it becomes the second one, in the seed's words.
 
 **Workable.** Whether a builder could start the day Open closes.
@@ -35,7 +36,7 @@ Read the draft once per question. Each names what to fix; fix it in place, and c
 **Template.** Whether it respects the shape.
 - A name, handle, channel, timestamp, or "the thread" anywhere but Open goes. A person who said something in the seed is not named for it.
 - A Decided line that says what the story leaves out goes.
-- An owner on an Open line who was not handed that question by name in the seed becomes unassigned. Answering or raising a question is not being handed it.
+- An owner on an Open line who was not handed that question by name in the seed becomes unassigned. Answering or raising a question is not being handed it, and a question called someone's because they raised it is not either.
 - An Example whose outcome an Open line still asks about goes.
 - A fourth line in a section: the weakest goes, and Could not fix says which and why.
 
