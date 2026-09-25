@@ -11,7 +11,7 @@ Examples
 - [The full context: which project, which file, what is present and absent] → [what the person sees]. The reported incident first. Then one per rule the wording leaves open, and one where two rules meet. Three to six; more is the signal to split.
 
 Decided
-- [A choice made in conversation, by whom, the alternative rejected, and why. Rationale only; a line that changes what the person sees is a criterion or an example. At most three.]
+- [A choice made while refining, the alternative rejected, and why. Rationale only; a line that changes what the person sees is a criterion or an example. At most three.]
 
 Out of scope
 - [A case deliberately not handled, what the person sees when it occurs, and the key that owns it when one does.]

@@ -14,7 +14,7 @@ The seed is $ARGUMENTS or whatever is in the room: a key, a pasted story, an ide
 
 Preset: the `## Preset` heading of any `.agentic/alt/*/extend-skill.md`, else developer.
 
-Read if present, ignore if absent: `.agentic/sources.md`, where this team's facts live, and `.agentic/alt/story-refine/extend-skill.md`, this repo's overrides under two headings. `## Preset`: one word. `## Shows`: the fields the product shows a person as a headline; a criterion names each one this change touches, verbatim.
+Read if present, ignore if absent: `.agentic/sources.md`, where this team's facts live, and `.agentic/alt/story-refine/extend-skill.md`, this repo's overrides under two headings. `## Preset`: one word. `## Shows`: the names of the fields the product shows a person as a headline, nothing else. Where the template, the extend file, and the preset disagree, the template rules, then the extend file, then the preset.
 
 ## Homework
 
@@ -33,7 +33,7 @@ One question a turn, only for what the room, the thread, and the code do not ans
 
 ## Then decisions
 
-Invoke `alt:decisions` against the draft. Ask the runner each root, one a turn. An answer that changes what the person sees folds into a criterion or an example; an answer that only says why folds into Decided with who chose; `team` or no answer lands under Open with its hat, a name or `unassigned`, and its if-wrong line. A root about the need or the outcome belongs to the parent: with a parent it goes there and the story cites it; with none, the runner is offered `alt:epic-refine` once before the write, and a decline leaves the parent field empty with nothing said about why. If decisions did not load, Open reads `decisions did not run; run /alt:decisions on this story` and the closing line says so.
+Invoke `alt:decisions` against the draft. Ask the runner each root, one a turn. An answer that changes what the person sees folds into a criterion or an example; an answer that only says why folds into Decided; `team` or no answer lands under Open with its hat, a name or `unassigned`, and its if-wrong line. A root about the need or the outcome belongs to the parent: with a parent it goes there and the story cites it; with none, the runner is offered `alt:epic-refine` once before the write, and a decline leaves the parent field empty with nothing said about why. If decisions did not load, Open reads `decisions did not run; run /alt:decisions on this story` and the closing line says so.
 
 ## Then the sweep
 
@@ -46,17 +46,16 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/story-refine/template.md` only now. Fill it, 
 Show:
 
 - On create: the title, the parent key or none, the keys it waits on, and the description.
-- On refine, item already in the shape: each section where the item and this run disagree, both sides quoted. An Open line the thread answered leaves Open and lands where its answer belongs.
-- On refine, item not in the shape: the new description; the original stays in the item's edit history.
+- On refine, item already in the shape: each section where the item and this run disagree, both sides quoted; a line already there stays unless the runner says otherwise. An Open line the thread answered leaves Open and lands where its answer belongs.
+- On refine, item not in the shape: a create from the need the item names; nothing in it is kept for being there, and the original stays in the item's edit history.
 
 Then, in the room only, the Open lines that change what the person sees, since the story is not ready to pull until they close.
 
-Ask once whether to create or edit it. On yes, write the title and parent to their fields, the description as one block, and each item this story waits on as the tracker's dependency relation, through whatever tracker the session reaches. A dependency the relation cannot hold, a pull request or a branch, is said in the room and written nowhere. Report the key. Then stop.
+The tracker shows who wrote the story and when; the story does not repeat it. Ask once whether to create or edit it. On yes, write the title and parent to their fields, the description as one block, and each item this story waits on as the tracker's dependency relation, through whatever tracker the session reaches. A dependency the relation cannot hold, a pull request or a branch, is said in the room and written nowhere. Report the key. Then stop.
 
 ## Rules
 
-- A line already in the item stays unless the runner says otherwise.
-- A list a rule turns on is named by its policy and lives in code. When the signer must own its members, it is a short table on the story.
+- Data a rule turns on, a list, a map, a threshold, is the what: a short table on the story. A table too long for the story is a story too big.
 - A line that changes what the person sees is a criterion or an example, wherever it started.
 - Never a metric, a size, a priority, a status, or a readiness verdict on the story. Never a sentence telling the reader the story may be wrong.
 - Never starts the work, never edits code, never enters plan mode.
