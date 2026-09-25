@@ -3,7 +3,7 @@
 [Four sentences. Whose need this is, the person the product serves rather than the person who runs it, in their own words when the thread has them, and what they stop or start doing once this lands, with a number or a range when one exists. What was observed, with the date and the words the product said. What the product says once this lands.]
 
 **Acceptance criteria**
-- [One rule per way the outcome is reached, at the level of what, never how. Only what the product owner would reject the work over. Two rules that would be prioritised differently are two stories.]
+- [One rule per way the outcome is reached, at the level of what, never how; nothing named that the thread did not name. Only what the product owner would reject the work over. Two rules that would be prioritised differently are two stories.]
 - [When the product already shows a headline, the headline verbatim. When it does not yet, or the line is longer than a headline, what it must tell the reader; the words are the builder's.]
 
 **Examples**

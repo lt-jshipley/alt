@@ -6,13 +6,13 @@ argument-hint: [key, pasted story, or the idea]
 
 # story-create
 
-A story is what a team agrees to build, written by the business side so the product owner can sign it and the builder can challenge it. Every line says what changes for whom, states a rule the signer would reject the work over, shows an example at an edge, records a choice and why, or names a question and whose it is. None says how, and no section holds what the story leaves out; a case it does not handle is an Open line if someone must decide it, and nothing otherwise. The test for every line is one: if only one way of building could satisfy it, it says how and goes. The skill never reads source code; what the builder finds there comes back later as questions, not as story text. Draft it, show it, write it on the runner's go, then stop.
+A story is what a team agrees to build, written by the business side so the product owner can sign it and the builder can challenge it. Every line says what changes for whom, states a rule the signer would reject the work over, shows an example at an edge, records a choice and why, or names a question and whose it is. None says how, and no section holds what the story leaves out; a case it does not handle is an Open line if someone must decide it, and nothing otherwise. The test for every line is one: if only one way of building could satisfy it, it says how and goes. The skill never reads source code; what the builder finds there comes back later as questions, not as story text. Draft it, have it reviewed, show it, write it on the runner's go, then stop.
 
 ## Inputs
 
 The seed is $ARGUMENTS or whatever is in the room: a key, a pasted story, an idea, the conversation so far. A key with a tracker connection means rewrite that item; anything else means create.
 
-Read if present, ignore if absent: `.agentic/sources.md`, where this team's facts live, and `.agentic/alt/story-create/extend-skill.md`, this repo's one override under one heading, `## Shows`: the names of the fields the product shows a person as a headline, nothing else. Where the template and the extend file disagree, the template rules.
+Read if present, ignore if absent: `.agentic/sources.md`, where this team's facts live, and `.agentic/alt/story-create/extend-skill.md`, this repo's one override under one heading, `## Shows`: the names of the fields the product shows a person as a headline, nothing else. Where the template and the extend file disagree, the template rules. An assistant in the seed is never an owner and never a source of a decision; its proposals are questions only where a person in the seed took them up.
 
 ## Homework
 
@@ -27,7 +27,7 @@ The homework shapes the story; none of it is written into the story or beside it
 
 ## Ask
 
-One question a turn, only for what the room and the thread do not answer. In order: whose need this is, the person the product serves, and what they stop or start doing once it lands; what was seen, when, and in what words; the rules the product owner would reject the work over; the example at each edge the rules leave open; a choice made on the way and why. Stop asking when the shape can be filled. A question with nobody in the room to answer it is an Open line, not a question. A claim the thread leaves unchecked is an Open line, not an example. A way of building that someone in the thread proposed, or described as how it works today, is a question, not a rule, however settled it sounded. With no parent, offer `alt:epic-refine` once before the write; a decline leaves the parent field empty with nothing said about why.
+One question a turn, only for what the room and the thread do not answer. In order: whose need this is, the person the product serves, and what they stop or start doing once it lands; what was seen, when, and in what words; the rules the product owner would reject the work over; the example at each edge the rules leave open; a choice made on the way and why. Stop asking when the shape can be filled. A question with nobody in the room to answer it is an Open line, not a question. A claim the thread leaves unchecked is an Open line, not an example. A way of building that someone in the thread proposed, or described as how it works today, is a question, not a rule, however settled it sounded. A proposal the thread turned down is a Decided line, with the reason given. With no parent, offer `alt:epic-refine` once before the write; a decline leaves the parent field empty with nothing said about why.
 
 ## Fill
 
@@ -35,15 +35,7 @@ Read `${CLAUDE_PLUGIN_ROOT}/skills/story-create/template.md` only now and fill i
 
 ## Before showing
 
-Write the draft to a file under the session's scratch space and run `python3 ${CLAUDE_PLUGIN_ROOT}/skills/story-create/scripts/check.py <file>`. It prints one line per failure and nothing on a pass. Fix each line it names and run it again. If the script is missing or fails to run, do its checks by hand and say so in one line.
-
-Then read the draft once as the signer and answer five questions. On a no, fix the line before showing.
-
-- Does any Example show an outcome an Open line still asks about? Then the Example goes.
-- Does any Decided line restate a criterion or an Open line? Then it goes.
-- Was every owner on an Open line given that question in the thread? Otherwise unassigned.
-- Does the first sentence name whose need this is, in their words when the thread has them?
-- Does any line name a way of building? Then it is an Open line or nothing.
+Write the draft to a file under the session's scratch space and run `python3 ${CLAUDE_PLUGIN_ROOT}/skills/story-create/scripts/check.py <file>`. Fix each line it prints and run it again. Then send the draft and the seed to a sub-agent that has read neither, with one instruction: invoke `alt:story-review` against them. Take its edited draft as the draft. Its Changed and Could not fix lines are shown beside the draft; a Could not fix line the runner cannot settle becomes an Open line.
 
 ## Show, then write
 

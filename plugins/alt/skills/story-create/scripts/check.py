@@ -7,7 +7,7 @@ ALLOWED = {"Acceptance criteria", "Examples", "Decided", "Open"}
 VOCAB = re.compile(r"\b(runner|sweep|hat|the room)\b", re.I)
 TIME = re.compile(r"\b\d{1,2}:\d{2}\b")
 HANDLE = re.compile(r"(?<![\w.])@\w+")
-PER_NAME = re.compile(r"\bper [A-Z][a-z]+\b")
+OMIT = re.compile(r"\b(left out|stays? out|out of this story|not in this story|unrelated)\b", re.I)
 PAREN_NAME = re.compile(r"\((?:@?[A-Z][a-z]+)(?:,\s*\d{1,2}:\d{2})?\)")
 BRACKET = re.compile(r"\[[^\]]+\]")
 
@@ -54,10 +54,10 @@ def main(path):
                 fails.append(f"line {n}: timestamp outside Open")
             if HANDLE.search(line):
                 fails.append(f"line {n}: handle outside Open")
-            if PER_NAME.search(line):
-                fails.append(f"line {n}: 'per Name' attribution")
             if PAREN_NAME.search(line):
                 fails.append(f"line {n}: name in parentheses")
+        if section == "Decided" and OMIT.search(line):
+            fails.append(f"line {n}: Decided records what the story leaves out")
         if BRACKET.search(line) and not re.match(r"^\s*\[?Title", line):
             fails.append(f"line {n}: bracket text left in")
         if "Closed before pickup" in line:
