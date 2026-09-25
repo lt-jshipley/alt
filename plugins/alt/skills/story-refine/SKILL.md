@@ -6,7 +6,7 @@ argument-hint: [key, pasted story, or the idea]
 
 # story-refine
 
-A story is what a team agrees to build, written so the product owner can sign it and the builder can challenge it. Every line says what changes for whom, states a rule the signer would reject the work over, shows an example at an edge, records a choice and why, or names a question and whose it is. None says how, and none says what the builder could read in the repo, run in the tests, or follow through a link. Refine it, show it, write it on the runner's go, then stop.
+A story is what a team agrees to build, written so the product owner can sign it and the builder can challenge it. Every line says what changes for whom, states a rule the signer would reject the work over, shows an example at an edge, records a choice and why, or names a question and whose it is. None says how, and none says what the builder could read in the repo, run in the tests, or follow through a link. The test for every line is one: if only one way of building could satisfy it, it says how and goes. Refine it, show it, write it on the runner's go, then stop.
 
 ## Inputs
 
@@ -25,11 +25,11 @@ Facts are looked up, never asked, and each is cited in the room by path and a sy
 - docs: what covers that part, from the sources file and the item's links, what the product itself says about it, and the file that defines the product's words when the repo has one; the story is written in them, and a word it needs that the file lacks is either the how or a term the repo should define.
 - people: never asked.
 
-The homework shapes the story and catches false premises; none of it is written into the story or beside it. What the builder can look up, the builder looks up.
+The homework shapes the story and catches false premises; none of it is written into the story or beside it, except a finding that contradicts the seed, which is an Open line. What the builder can look up, the builder looks up.
 
 ## Ask
 
-One question a turn, only for what the room, the thread, and the code do not answer. In order: whose need this is and what they stop or start doing once it lands; what was seen, when, and in what words; the rules the product owner would reject the work over; the example at each edge the rules leave open; what a reader would assume is in and is not. Stop asking when the shape can be filled. A question with nobody in the room to answer it is an Open line, not a question.
+One question a turn, only for what the room, the thread, and the code do not answer. In order: whose need this is and what they stop or start doing once it lands; what was seen, when, and in what words; the rules the product owner would reject the work over; the example at each edge the rules leave open; what a reader would assume is in and is not. Stop asking when the shape can be filled. A question with nobody in the room to answer it is an Open line, not a question. A claim the thread leaves unchecked is an Open line, not an example.
 
 ## Then decisions
 
@@ -37,11 +37,11 @@ Invoke `alt:decisions` against the draft. Ask the runner each root, one a turn. 
 
 ## Then the sweep
 
-Five minutes on what else could be true: inputs the rules never mention, states the incident did not show, the case where the premise itself is false. Each hit is routed to a criterion, an example, Out of scope, or Open, and keeps its outcome on the way; when placing it would change what the person sees, it is an Open line. A hit that fits nowhere is an Open line, never dropped. The list itself is never written.
+Five minutes on what else could be true: inputs the rules never mention, states the incident did not show, the case where the premise itself is false. Each hit is routed to a criterion, an example, Out of scope, or Open, and keeps its outcome on the way; when placing it would change what the person sees, it is an Open line. A hit that fits nowhere is an Open line, never dropped. When Open is full it is still an Open line and the split is named in the room; a hit is never moved to Out of scope to fit. The list itself is never written.
 
 ## Show, then write
 
-Read `${CLAUDE_PLUGIN_ROOT}/skills/story-refine/template.md` only now. Fill it, then hold it against its own limits before showing: about 350 words; four sentences in the opener; three to six examples; at most three lines each under Decided and Open. Over a limit means split, or an Open line, never a rule trimmed to fit. A line that would be false after next week's commits goes; a line the builder could derive goes.
+Read `${CLAUDE_PLUGIN_ROOT}/skills/story-refine/template.md` only now. Fill it, then hold it against its own limits before showing: about 350 words; four sentences in the opener; three to six examples; at most three lines each under Decided and Open. Over a limit means split, or an Open line, never a rule trimmed to fit.
 
 Show:
 
