@@ -56,7 +56,7 @@ To keep the gauge but skip the per-turn model call in one project, set
 
 ```
 Fable 5 · high | context-health-monitor ⚠ main +2 !3 ?1 ↑2        ← identity: model · effort | git
-Session: Stable | 12% used (24k) | topics:2 · loops:1/4 · fails:1/31   ← the gauge
+Session: Stable | 12% used (24k) | topics:2 · resolved concepts:4 · loose ends:1 · cli tool fails:1/31   ← the gauge
 Topics: billing-proration:4 | invoice-tests:1                     ← judge's topic tags (session mention counts)
 ```
 
@@ -90,7 +90,7 @@ Degrading informs, never nags.
 | Signal | Source | Elevates | Restart on its own |
 |---|---|---|---|
 | Topics | judge, per-session vocabulary | 5+ distinct in one session | — |
-| Open loops | judge; age-gated — a loop only counts once unresolved 3+ turns | 2+ stale | 3+ stale |
+| Loose ends (open loops) | judge; age-gated — a loose end only counts once unresolved 3+ turns | 2+ stale | 3+ stale |
 | Tool failures | counters (event identity only) | ≥5 failures at ≥10% of calls, or ≥15 total, or 4+ consecutive, or 3 inside 2 minutes — at most one elevation, whichever is most specific | — |
 | User corrections | judge; repeats matched against prior corrections | 2+ in the session | same issue corrected 3+ times (Anthropic's clear-and-restart rule) |
 | Compactions | SessionStart(compact) counter | — | any compaction |

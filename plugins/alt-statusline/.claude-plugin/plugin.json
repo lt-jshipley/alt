@@ -1,7 +1,7 @@
 {
   "name": "alt-statusline",
   "displayName": "alt-statusline",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Session health gauge for the Claude Code statusline: topic drift, open loops, tool failures, corrections, compactions, and context use, graded per session. Does nothing until /alt-statusline:setup is run.",
   "author": {
     "name": "Lean Techniques",

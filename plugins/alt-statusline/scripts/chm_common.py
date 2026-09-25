@@ -296,9 +296,10 @@ def save_ctx(session_id, pct, tokens):
 
 
 def stale_open_loops(ledger):
-    """Open loops old enough to grade — shared by grade() and the statusline
-    so display and verdict can't disagree. Entries missing opened_turn count
-    as stale (fail toward caution, never silence)."""
+    """Open loops old enough to grade. The statusline shows the whole open
+    count as "loose ends" and takes its color from the verdict, so display
+    and grade stay consistent without repeating the age rule. Entries missing
+    opened_turn count as stale (fail toward caution, never silence)."""
     turn = ledger.get("turn", 0)
     return [l for l in ledger["open_loops"]
             if turn - l.get("opened_turn", 0) >= LOOP_STALE_TURNS]

@@ -224,14 +224,14 @@ if led:
         # culprit chips wear the band color; healthy chips are green
         return f"{band}{text}{RESET}" if key in flags else f"{GREEN}{text}{RESET}"
 
-    stale = len(chm.stale_open_loops(led))
-    loops_text = f"loops:{len(led['open_loops'])}/{led['closed_loops']}"
-    if stale:
-        loops_text += f" ({stale} stale)"
+    # loose ends: approaches or questions the session started and never
+    # said it finished; resolved concepts: the ones it did. Separate chips,
+    # never a fraction: 5 loose ends beside 4 resolved is a normal reading.
     health = [
         chip(f"topics:{len(led['topics'])}", "topics"),
-        chip(loops_text, "loops"),
-        chip(f"fails:{c['tool_failures']}/{c['tool_calls'] + c['tool_failures']}", "fails"),
+        chip(f"resolved concepts:{led['closed_loops']}", "loops"),
+        chip(f"loose ends:{len(led['open_loops'])}", "loops"),
+        chip(f"cli tool fails:{c['tool_failures']}/{c['tool_calls'] + c['tool_failures']}", "fails"),
     ]
     if led["corrections"]:
         health.append(chip(f"corrections:{led['corrections']}", "corrections"))
