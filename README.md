@@ -48,6 +48,7 @@ plugins/alt-statusline/            Session health gauge for the statusline; hook
   hooks/hooks.json                 Plugin hooks, inert until setup registers a scope
   scripts/                         Hook scripts, statusline, judge prompt, setup.py, launcher, simulate.sh
   skills/setup, skills/remove      Install and uninstall
+  skills/loose-ends                Lists the session's loose ends, reads each from memory, closes the confirmed ones
 .agentic/                          Reserved here; in a consuming repo this holds sources.md, alt extension files, and the gitignored briefs/ folder
 .claude/                           Reserved for Claude Code config for working in this repo itself; empty so far
 .project/archive/skills/           Skills removed from the plugin, kept for the record; not loaded by Claude Code

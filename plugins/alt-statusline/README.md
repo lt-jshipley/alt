@@ -109,6 +109,12 @@ Grading notes, each a deliberate stance:
   transcript with no manifest of what was dropped, and the loss only surfaces
   behaviorally, after it bites. With restarts cheap, a compacted session gets
   restarted, not nursed.
+- **Loose ends can be closed by hand.** A loose end is an approach or question
+  the judge saw the session start and never saw it finish. The judge closes one
+  only when a later turn says so in words, and it runs a cycle behind, so
+  `/alt-statusline:loose-ends` lists them, reads each from the session's own
+  memory, and closes the ones the user confirms. Closing pops the entry under
+  the judge lock and counts it as resolved — a ledger write, not a hint.
 - **Topics are per session.** The judge reuses the session's own topic list, so
   names stay consistent within a session and a genuinely new detour always
   mints a new tag. Nothing is shared between sessions; comparing sessions is a
@@ -145,7 +151,10 @@ scripts/
   judge_prompt.md        instructions for the one-shot judge call
   simulate.sh            plumbing, gate, grading, concurrency, and setup
                          round-trip checks — no real model call
-skills/setup, skills/remove
+  loose_ends.py          `list` and `close` the session's open loops by hand,
+                         under the judge lock; the session comes from
+                         CLAUDE_CODE_SESSION_ID
+skills/setup, skills/remove, skills/loose-ends
 ```
 
 State lives outside the plugin, in `~/.claude/alt-statusline/`, which must be

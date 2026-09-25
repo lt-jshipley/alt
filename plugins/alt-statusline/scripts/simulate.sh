@@ -7,7 +7,7 @@
 # token display, degraded payloads (schema drift), the setup.py install/remove
 # round trip, the launcher's plugin-root resolution, and the concurrency rules
 # (ledger lock, registry lock, serialized Stops, prompt attribution, judge
-# isolation flags).
+# isolation flags), and the loose-ends list/close path.
 # Runs against throwaway state and HOME dirs; touches nothing real.
 set -e
 SCRIPTS="$(cd "$(dirname "$0")" && pwd)"
@@ -518,5 +518,54 @@ assert "user" not in reg, reg
 print("registry race: install record stays removed — ok")
 PYEOF
 python3 "$SETUP" install --plugin-root "$PLUGIN_ROOT" >/dev/null
+
+echo "--- 12. LOOSE ENDS: list and close by hand, numbers checked, judge lock honoured, no session -> one line"
+export CHM_NO_JUDGE=1
+LSID="loose-$$"
+python3 - "$LSID" <<'PYEOF'
+import sys, chm_common as chm
+sid = sys.argv[1]
+with chm.locked_ledger({"session_id": sid}) as led:
+    led["turn"] = 10
+    led["open_loops"] = [
+        {"desc": "try approach A", "opened_turn": 2},
+        {"desc": "check whether B is the cause", "opened_turn": 5},
+        {"desc": "just started C", "opened_turn": 10},
+    ]
+PYEOF
+LE() { env -u CLAUDE_CODE_SESSION_ID "$PY" "$SCRIPTS/loose_ends.py" "$@"; }
+OUT=$(LE list --session "$LSID")
+echo "$OUT" | grep -q "^1\. try approach A  (open 8 turns, counts against the session)" || { echo "FAIL list line 1: $OUT"; exit 1; }
+echo "$OUT" | grep -q "^3\. just started C  (open 0 turns)$" || { echo "FAIL list line 3 (fresh must not count): $OUT"; exit 1; }
+echo "$OUT" | grep -q "^resolved this session: 0$" || { echo "FAIL resolved line: $OUT"; exit 1; }
+OUT=$(LE close 2 --session "$LSID")
+echo "$OUT" | grep -q "^closed: check whether B is the cause$" || { echo "FAIL close 2: $OUT"; exit 1; }
+[ "$(ledger "$LSID" "['closed_loops']")" = "1" ] || { echo "FAIL closed_loops"; exit 1; }
+[ "$(ledger "$LSID" "['open_loops'][1]['desc']")" = '"just started C"' ] || { echo "FAIL wrong entry popped"; exit 1; }
+OUT=$(LE close 9 --session "$LSID")
+echo "$OUT" | grep -q "^no loose end numbered 9; the list holds 2. nothing closed$" || { echo "FAIL close 9: $OUT"; exit 1; }
+[ "$(ledger "$LSID" "['closed_loops']")" = "1" ] || { echo "FAIL close 9 wrote"; exit 1; }
+# judge lock held elsewhere: close waits CHM_JUDGE_WAIT_S then declines, writes nothing
+python3 - "$LSID" <<'PYEOF' &
+import sys, time, chm_common as chm
+with chm.judge_lock(sys.argv[1], 5) as ok:
+    assert ok
+    time.sleep(3)
+PYEOF
+HOLDER=$!
+sleep 0.5
+OUT=$(CHM_JUDGE_WAIT_S=1 LE close --all --session "$LSID")
+wait $HOLDER
+echo "$OUT" | grep -q "^the judge is still grading" || { echo "FAIL busy close: $OUT"; exit 1; }
+[ "$(ledger "$LSID" "['closed_loops']")" = "1" ] || { echo "FAIL busy close wrote"; exit 1; }
+OUT=$(LE close --all --session "$LSID")
+echo "$OUT" | grep -q "^loose ends left: 0\. resolved this session: 3$" || { echo "FAIL close --all: $OUT"; exit 1; }
+OUT=$(LE list --session "$LSID")
+[ "$OUT" = "no loose ends. resolved this session: 3" ] || { echo "FAIL empty list: $OUT"; exit 1; }
+OUT=$(LE list); RC=$?
+[ $RC -eq 0 ] && [ "$(echo "$OUT" | wc -l | tr -d ' ')" = "1" ] && echo "$OUT" | grep -q "^no session id" || { echo "FAIL no session: rc=$RC $OUT"; exit 1; }
+OUT=$(CLAUDE_CODE_SESSION_ID="$LSID" "$PY" "$SCRIPTS/loose_ends.py" list)
+[ "$OUT" = "no loose ends. resolved this session: 3" ] || { echo "FAIL env session: $OUT"; exit 1; }
+echo "loose ends: list, close by number, refuse a bad number, decline under the judge lock, close all, env session — ok"
 
 echo "--- all checks passed"

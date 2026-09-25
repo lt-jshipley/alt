@@ -23,7 +23,8 @@ Your job, exactly four judgments:
    delta and not resolved within it. One short sentence each. Do not re-list loops
    already in the ledger. Progress on, or continued investigation of, a loop
    already in the ledger is NOT a new loop — only genuinely new approaches or
-   newly-started threads open loops.
+   newly-started threads open loops. A turn that lists, reviews, or closes the
+   session's loose ends (open loops) opens nothing.
 
 3. **closed_loops**: which of the ledger's existing open_loops (by index) were
    resolved, abandoned-with-explanation, or superseded in this delta. Resolution
