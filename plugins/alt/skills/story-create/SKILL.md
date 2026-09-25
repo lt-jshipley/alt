@@ -6,7 +6,7 @@ argument-hint: [key, pasted story, or the idea]
 
 # story-create
 
-A story is what a team agrees to build, written by the business side so the product owner can sign it and the builder can challenge it. Every line says what changes for whom, states a rule the signer would reject the work over, shows an example at an edge, records a choice and why, or names a question and whose it is. None says how. The test for every line is one: if only one way of building could satisfy it, it says how and goes. The skill never reads source code; what the builder finds there comes back later as questions, not as story text. Draft it, show it, write it on the runner's go, then stop.
+A story is what a team agrees to build, written by the business side so the product owner can sign it and the builder can challenge it. Every line says what changes for whom, states a rule the signer would reject the work over, shows an example at an edge, records a choice and why, or names a question and whose it is. None says how, and no section holds what the story leaves out; a case it does not handle is an Open line if someone must decide it, and nothing otherwise. The test for every line is one: if only one way of building could satisfy it, it says how and goes. The skill never reads source code; what the builder finds there comes back later as questions, not as story text. Draft it, show it, write it on the runner's go, then stop.
 
 ## Inputs
 
@@ -27,11 +27,25 @@ The homework shapes the story; none of it is written into the story or beside it
 
 ## Ask
 
-One question a turn, only for what the room and the thread do not answer. In order: whose need this is and what they stop or start doing once it lands; what was seen, when, and in what words; the rules the product owner would reject the work over; the example at each edge the rules leave open; what a reader would assume is in and is not; a choice made on the way and why. Stop asking when the shape can be filled. A question with nobody in the room to answer it is an Open line, not a question. A claim the thread leaves unchecked is an Open line, not an example. With no parent, offer `alt:epic-refine` once before the write; a decline leaves the parent field empty with nothing said about why.
+One question a turn, only for what the room and the thread do not answer. In order: whose need this is, the person the product serves, and what they stop or start doing once it lands; what was seen, when, and in what words; the rules the product owner would reject the work over; the example at each edge the rules leave open; a choice made on the way and why. Stop asking when the shape can be filled. A question with nobody in the room to answer it is an Open line, not a question. A claim the thread leaves unchecked is an Open line, not an example. A way of building that someone in the thread proposed is a question, not a rule, however settled it sounded. With no parent, offer `alt:epic-refine` once before the write; a decline leaves the parent field empty with nothing said about why.
 
-## Show, then write
+## Fill
 
 Read `${CLAUDE_PLUGIN_ROOT}/skills/story-create/template.md` only now and fill it. Each list section holds three lines. The incident is the first example; a line where two rules meet comes before one that restates a rule. A fourth line in any section is offered to the runner in one line with what it protects, written on a yes, dropped otherwise. A section that wants a fifth is a story that wants splitting, and the split is named in the room.
+
+## Before showing
+
+Write the draft to a file under the session's scratch space and run `python3 ${CLAUDE_PLUGIN_ROOT}/skills/story-create/scripts/check.py <file>`. It prints one line per failure and nothing on a pass. Fix each line it names and run it again. If the script is missing or fails to run, do its checks by hand and say so in one line.
+
+Then read the draft once as the signer and answer five questions. On a no, fix the line before showing.
+
+- Does any Example show an outcome an Open line still asks about? Then the Example goes.
+- Does any Decided line restate a criterion or an Open line? Then it goes.
+- Was every owner on an Open line given that question in the thread? Otherwise unassigned.
+- Does the first sentence name whose need this is, in their words when the thread has them?
+- Does any line name a way of building? Then it is an Open line or nothing.
+
+## Show, then write
 
 Show:
 
@@ -41,7 +55,7 @@ Show:
 
 Then, in the room only, the Open lines that change what the person sees, since the story is not ready to pull until they close, and one line saying the builder's pass against the code comes next and returns questions, not text.
 
-The tracker shows who wrote the story and when; the story does not repeat it. Ask once whether to create or edit it. On yes, write the title and parent to their fields, the description as one block, and each item this story waits on as the tracker's dependency relation, through whatever tracker the session reaches. A dependency the relation cannot hold, a pull request or a branch, is said in the room and written nowhere. Report the key. Then stop.
+Ask once whether to create or edit it. On yes, write the title and parent to their fields, the description as one block, and each item this story waits on as the tracker's dependency relation, through whatever tracker the session reaches. A dependency the relation cannot hold, a pull request or a branch, is said in the room and written nowhere. Report the key. Then stop.
 
 ## Rules
 
