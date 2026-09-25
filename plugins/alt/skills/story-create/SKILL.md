@@ -12,9 +12,7 @@ A story is what a team agrees to build, written by the business side so the prod
 
 The seed is $ARGUMENTS or whatever is in the room: a key, a pasted story, an idea, the conversation so far. A key with a tracker connection means rewrite that item; anything else means create.
 
-Preset: the `## Preset` heading of any `.agentic/alt/*/extend-skill.md`, else developer.
-
-Read if present, ignore if absent: `.agentic/sources.md`, where this team's facts live, and `.agentic/alt/story-create/extend-skill.md`, this repo's overrides under two headings. `## Preset`: one word. `## Shows`: the names of the fields the product shows a person as a headline, nothing else. Where the template, the extend file, and the preset disagree, the template rules, then the extend file, then the preset.
+Read if present, ignore if absent: `.agentic/sources.md`, where this team's facts live, and `.agentic/alt/story-create/extend-skill.md`, this repo's one override under one heading, `## Shows`: the names of the fields the product shows a person as a headline, nothing else. Where the template and the extend file disagree, the template rules.
 
 ## Homework
 
@@ -50,7 +48,7 @@ The tracker shows who wrote the story and when; the story does not repeat it. As
 - A line that changes what the person sees is a criterion or an example, wherever it started.
 - Never a metric, a size, a priority, a status, or a readiness verdict on the story. Never a sentence telling the reader the story may be wrong.
 - Never starts the work, never edits code, never enters plan mode.
-- Written outside the session, to a tracker item or a message, a person is a name or handle and a role is the preset's word. The words the skills use for their own mechanics, runner, room, seat, hat, shape, the record, never appear there.
+- Written outside the session, to a tracker item or a message, a person is a name or handle and a role is a plain word anyone on the team would use. The words the skills use for their own mechanics, runner, room, shape, the record, never appear there.
 - Non-interactive: show the draft and stop; the write needs the runner present.
 
 ## When something is missing, say so in one line
@@ -59,4 +57,3 @@ The tracker shows who wrote the story and when; the story does not repeat it. As
 - Key given, no tracker connection: create from what is in the room; the key is carried, the item unread.
 - No tracker reachable at write time: the description in the room as markdown, and say the write was skipped.
 - Item already complete: nothing to do.
-- Preset is business or research: developer work only, for now.
