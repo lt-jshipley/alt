@@ -233,7 +233,7 @@ if led:
         chip(f"topics:{len(led['topics'])}", "topics"),
         chip(f"resolved concepts:{led['closed_loops']}", "loops"),
         chip(f"loose ends:{len(led['open_loops'])}", "loops"),
-        chip(f"ai misunderstandings:{led['corrections']}", "corrections"),
+        chip(f"ai misunderstandings corrected:{led['corrections']}", "corrections"),
         chip(f"cli tool fails:{c['tool_failures']}/{c['tool_calls'] + c['tool_failures']}", "fails"),
     ]
     if c["compactions"]:

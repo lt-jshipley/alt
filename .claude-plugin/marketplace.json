@@ -32,7 +32,7 @@
       "source": "./plugins/alt-statusline",
       "displayName": "alt-statusline",
       "description": "Session health gauge for the Claude Code statusline: topic drift, open loops, tool failures, corrections, compactions, and context use, graded per session. Inert until /alt-statusline:setup.",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "author": {
         "name": "Lean Techniques",
         "email": "jshipley@leantechniques.com"
