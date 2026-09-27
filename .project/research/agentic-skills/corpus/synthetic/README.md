@@ -34,6 +34,14 @@ r5, sorted by sum: R10 19, R8 18, R6 17, R7 17, R5 16, R1 15, R9 15, R3 14, R4 1
 
 A second, fresh session graded its own five runs of 0.15.2 at 17, 17, 17, 15, 14, one to two points below the first grader on the same version. Treat any single grader's numbers as ±1.
 
+## Epic rounds
+
+Runs of epic-create, from 0.17.0. Two seeds: `northwind-seed.md`, the same transcript read for its epic, and `feature-seed.md`, a synthetic Jira epic of the feature-container kind, a feature name at the top and the need in the comments. Filenames are `e<round>-<create|feature>-<run>.md`. Smoke and measure are in epic.md's Smoke section.
+
+| Round | alt version | Runs | What changed before it |
+|---|---|---|---|
+| e1 | 0.17.0 | pending | epic-create and epic-review shipped from the 2026-09-27 board |
+
 ## What this is for
 
-The stand-in corpus for the finder shadow test in lt-mcp-backlog until client use supplies real entries. Real entries go in `../` under their own date and slug, anonymised, in the five-heading form the restart doc describes. Do not add synthetic drafts here after r7; the Northwind seed is mined out.
+The stand-in corpus for the finder shadow test in lt-mcp-backlog until client use supplies real entries. Real entries go in `../` under their own date and slug, anonymised, in the five-heading form the restart doc describes. Do not add synthetic story drafts here after r7; the Northwind seed is mined out for stories. Epic rounds continue above.

@@ -232,3 +232,101 @@ Headless, `claude -p --plugin-dir`, a feature pasted as the seed, "Build a chatb
 - Summary.
 - The problem the skill solves, and for whom.
 - Relationship to story and to examine, after the examine run.
+
+## Shapes compared, 2026-09-27
+
+Same need each time: the Northwind report graded a client on 19 legacy projects they do not ship. The thought-leader shapes come from the sources read above; the industry shapes are from practice, as story-concept.md's Jira shapes are, provenance unconfirmed.
+
+**Patton, the opportunity sticky.** A few words, an outcome, then a conversation: "Report grades what the client ships. Consultants stop re-cutting reports after the readout. Who: clients with legacy folders (3 of last 6). Riskiest: that 'ships' can be told from a clone with no setup. Size: weeks."
+
+**Torres, the opportunity on the tree.** The outcome above, the need in the customer's words, the solutions compared, the leap-of-faith assumptions below: "You graded us on code we don't ship." Solutions considered: grade on solution membership; grade on CI history; grade everything and flag dead code separately.
+
+**Cagan, the team objective.** "Objective: Reduce disputed grades at client readouts. KR: readouts with a grade dispute, 2 of 6 to 0 of 6. KR: while report reproducibility from a bare clone stays at 100%. Theory: clients dispute grades built on code they do not ship. Roof shot." Leaders hand the problem, the team writes the numbers.
+
+**Gilad, the idea record.** In the bank, ranked against a goal it does not carry: "Idea: grade on what the client ships. State: assessing. Confidence: medium-low. Strongest evidence: 3 of 6 engagements had a graveyard folder. Next steps: ask two past clients what 'ships' means; re-run Northwind with /legacy excluded."
+
+**Cohn, the large story.** "As a consultant presenting the report, I want the grade to reflect what the client builds, so that the cover number is one they recognise." Split into stories by adding detail, never by lengthening.
+
+**Wayfinder, the decision map.** Destination, Decisions so far, Not yet specified, Out of scope, children as decision tickets. No outcome; done is nothing left to decide.
+
+Jeffries, Wake, North, Keogh, Adzic, Cockburn, and Fowler have no epic shape; their unit is the story.
+
+Industry, as it turns up: **1. Atlassian standard epic**, title, as-a-user description, a list of child stories; a folder with a name. **2. SAFe epic hypothesis statement** with a Lean Business Case; teams fill the hypothesis line and skip the rest. **3. PRD-style epic**, problem, goals, non-goals, success metrics, scope, timeline, risks; a document that goes stale the week the first story lands. **4. Shape Up pitch**, problem, appetite, solution, rabbit holes, no-gos; carries the solution on purpose and is the only shape that fixes time and flexes scope. **5. Feature container**, a feature name and a date with whatever got tagged beneath; the most common by far and what every book argues against. **6. One-pager or PR/FAQ**, outside the tracker, linked from the epic.
+
+Every thought leader puts the outcome and the bet on or directly above the epic; every industry shape but 2 and 3 leaves both out, and those two make the epic a document. The base for the skill is shape 1, as the story took the standard product-company ticket: what a reader recognises and a tracker renders, faults by omission rather than wrong content. Shape 5 is the seed most clients will paste, and converting it is the skill's first job.
+
+## Board 2026-09-27
+
+Six Opus reviewers, one per school (Patton, Torres, Cagan, Gilad, Cohn, Pocock), each grounded in its own section above and the local book before reading the draft. Round one graded a first draft and listed delete, change, add, and a forced single cut. Round two scored a revision on seven shared columns and one of the reviewer's own.
+
+Round one, grade of 5 and forced cut: Patton 4, Holds; Cagan 4, Not yet a story; Torres 3, Not; Gilad 3, Not yet a story; Cohn 3, Bet; Pocock 2, Open. Raised by two or more: Holds as three seats reads as a RACI chart (five of six); Not yet a story pre-slices the solution before discovery (three); the title was the consultancy's wording, not the customer's (three); the Bet's first line smuggled a solution and its "This" pointed at nothing (two each); "by when" on the Outcome turns the objective into a deliverable (two); evidence should say its kind (two); a confidence or ambition word (two). Four of six caught an invented baseline in the filled example and four caught a dropped Open line, the same two generator and blind-spot failures the story rounds found.
+
+Round two, revision with Holds cut to Decides and Measure, Not yet a story removed, Not renamed Decided, the Bet's guess named, evidence kinds, and an Open routing rule:
+
+| Column | Patton | Torres | Cagan | Gilad | Cohn | Pocock |
+|---|---|---|---|---|---|---|
+| Workable | 4 | 4 | 4 | 4 | 3 | 4 |
+| Standard-company fit | 4 | 4 | 4 | 4 | 3 | 4 |
+| Need, not feature | 4 | 4 | 4 | 4 | 4 | 3 |
+| Outcome honesty | 4 | 4 | 4 | 4 | 4 | 4 |
+| Bet and evidence | 4 | 3 | 4 | 3 | 4 | 4 |
+| Index, not document | 4 | 4 | 4 | 4 | 4 | 3 |
+| How kept out | 3 | 4 | 3 | 5 | 3 | 3 |
+| Own category | 3 | 3 | 1 | 2 | 2 | 2 |
+| Sum | 30 | 30 | 28 | 30 | 27 | 27 |
+
+Own categories: Patton, go or trash is a legitimate answer; Torres, heard from more than one customer; Cagan, level of ambition; Gilad, the next step that tests the riskiest bet; Cohn, conditions of satisfaction; Pocock, fog written down. Each school still wants one thing the others do not: the divergence the story read as the floor at 0.13.0.
+
+Raised by two or more in round two: the example's Open line, "in the solution but never built in CI", carried the developer's solution-file mechanism back in (four of six); nothing on the epic points outward, so evidence is described and never linked (five of six docked Index for it); "Decides: Marcus" was an inference the seed does not hold (three); the title "Grade us on the code we ship" is the ask, and the need behind it is a grade the client trusts (three); the unmeasured line should name a behaviour, "how often clients accept the cover grade at readout" (two, second round running); Bet is a word a Jira shop has to learn (three); an ambition or confidence word (two, second round running).
+
+Four reviewers flagged "keep it for reference" and two flagged "at readout" as invented. Both are in the Northwind transcript and missing from the seed summary the reviewers were handed. The reviewer gets the full seed, never a summary; story-review already has the rule and epic-review inherits it.
+
+## Decided 2026-09-27, epic-create
+
+The skill is `epic-create`, alt 0.17.0, beside `epic-refine`, which stays until epic-create has runs and is then archived as story-refine was. `epic-review` ships with it.
+
+- Two readers: the person who decides go or no-go signs it; the team that will slice it challenges it. The line test: names the need, says how we will know, names what we are betting on, records a choice and why, or names a question and whose. None says how, and none carries a feature as the need; a need only one solution could meet is a solution in disguise and goes to the Bet as a guess.
+- Never reads code. epic-refine's feasibility read is the builder's pass; feasibility is a Bet line with "none yet" as its evidence.
+- Committed from the board, all in output form: Open lines in the words of the people who have the need, no build nouns; the title is the pain or the need, never the ask; the unmeasured line names a behaviour; an Evidence line may carry a link the seed holds, since a pointer is not a document; roof shot or moon shot only when the team said which, restored from the 2026-09-21 template.
+- Holds became Decides and Measure, a name only when the seed handed them that seat, the seat omitted otherwise. Not yet a story is gone; a piece with no story is not written. Not became Decided, the story's section and bracket. "By when" left the Outcome line; a commitment is a tracker field.
+- Routing, the mirror of the story's upward exit: an Open line whose answer changes only what gets built leaves for the story that will carry it; its If-wrong must name the outcome or a Bet line. A story's question about the need, the outcome, or the why comes up. Applied to Northwind, the solution-file question goes to the cover-count story and the never-built-in-CI question stays, unassigned.
+- No number the seed or the measures seat does not hold; an empty number slot is the unmeasured line. check.py takes the seed and flags any digit the seed lacks.
+- Declined, and why: renaming Bet, the sources' own word for the thing the section makes explicit, held for the corpus to judge; conditions of satisfaction on the epic (Cohn, twice), pass or fail belongs to the story; a next step and test criteria per bet (Gilad, Torres), a discovery plan a standard company does not fill; a fog section (Pocock), an unassigned Open line in the customer's words already holds a question the room cannot phrase sharply; a confidence word (Gilad), nothing the tool writes can raise confidence and the evidence kind is his own communicated form.
+- Not carried from epic-refine: the preset, the inline decisions step, the comment holding the original text, "a line already in the item stays", the Holds triple, Not yet a story, the code read.
+- Seed kinds are story-concept.md's four; the feature-container epic (shape 5) is a fifth for this skill: a feature as the title, a date, children tagged beneath, the need somewhere in a comment or nowhere.
+
+## Issue log
+
+One line per entry, story-concept.md's form. Add new ones at the bottom.
+
+- **Recurrence in the opener.** Priya's "third in six engagements" is the evidence that this is not a Northwind thing and sat in the description, not on a Bet line → logged, once (Torres). (open)
+- **Guardrail on the unmeasured form.** The unmeasured line has no "without X getting worse" clause → logged, once (Cagan). (open)
+- **Summarised seed to the reviewer.** Four false invention flags from a seed summary → the reviewer gets the full seed, never a summary. (fixed)
+
+## Smoke
+
+Run after any edit to epic-create, epic-review, the template, or the script. Launch three Sonnet agents per seed in one message, each with exactly this prompt and its own output file `e<round>-<seed>-<k>.md`, seed being `create` for Northwind and `feature` for the feature seed; the next round is 1.
+
+> Working directory: /Users/jshipley/Development/agent-ready-assessment
+>
+> Invoke the skill `alt:epic-create` and follow it to write an epic from the pasted seed at: <path to seed>
+>
+> Read that file first. Treat its contents as the seed, a pasted draft in the room.
+>
+> Two standing instructions, nothing else:
+> - Nobody is present to answer questions. Any question the skill would ask goes under Open instead.
+> - Do not write to GitHub or any tracker, and do not edit either repo. Write the finished epic body to: <path to output>
+>
+> When done, report back, in this order:
+> 1. The epic body in full and its word count.
+> 2. Every file you read, in the order you read it, one line each.
+> 3. Whether check.py ran, what it printed on the first pass, and how many passes you made.
+> 4. For each section, how many lines you wrote and one sentence on how you chose that number.
+> 5. Any place the skill was silent or contradicted itself and what you did about it.
+> 6. epic-review's Changed and Could not fix lines, as returned.
+
+Carry no other instructions. The brief is the control; the skills are what is being tested.
+
+Measure each draft as the decider who would sign it and the team that would slice it, 1 to 5 on four columns, higher is better: **Need** (the people's need in their words, every decision the room made recorded, a handed-down feature converted); **Workable** (no number the seed lacks, every Open line's If-wrong names the outcome or a bet, every open question and only the seed's seat-holders present); **How kept out** (no mechanism anywhere, Open lines included); **Template** (card-sized, names only where the shape allows, no section padded, no child listed). Then run check.py with the seed on every final draft and record what it prints, the word count, the passes, and the number of Changed lines.
+
+Fails only if check.py prints anything on a final draft, any column scores 2 or lower, or a Changed line adds a fact the seed does not hold. A concept in two or more runs is a pattern and is fixed in output form: a deletion, a number, a routing rule, or a script check before any new sentence. A concept seen once is logged above and left. Smoke drafts go in `corpus/synthetic/`; client uses go in `corpus/<date>-<slug>.md` under the five headings story-concept-restart.md names, and the runner's edits before the write are the measure.
