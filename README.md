@@ -34,7 +34,7 @@ plugins/alt/                       The alt plugin
     triage/                        Reads a scope of open work in full and says what its symptoms are symptoms of: fixes what the record settles, routes what nobody holds as an Open line to the holder, names what is holding. Never grades or orders. Research in .project/research/agentic-skills/triage.md
   presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: developer, business, research
 
-The story and epic skills written from the business side, story-create, story-review, epic-create, and epic-review, moved to the lt-backlog-skills repo and install from there as the lt-backlog plugin. The session health gauge, alt-statusline, moved to the alt-statusline-reasoning repo and installs from its own marketplace of that name.
+The story and epic skills written from the business side, story-create, story-review, epic-create, and epic-review, moved to the lt-backlog-skills repo and install from there as the lt-backlog plugin.
 .agentic/                          Reserved here; in a consuming repo this holds sources.md, alt extension files, and the gitignored briefs/ folder
 .claude/                           Reserved for Claude Code config for working in this repo itself; empty so far
 .project/archive/skills/           Skills removed from the plugin, kept for the record; not loaded by Claude Code
