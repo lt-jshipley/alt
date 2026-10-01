@@ -30,7 +30,7 @@ Now
 - [ ] Dogfood: create GitHub Issues in this repo from the roadmap and this file, run sources-sync, then story-create, epic-refine, and triage against them; log each
 On a client
 - [ ] Run story-create on a real tracker item in a real repo
-- [ ] Run epic-refine on a real epic with children
+- epic-refine archived in 0.20.0; lt-backlog's epic-create covers it.
 - [ ] Run triage on a real board or epic scope
 - [ ] Fill the run log for each
 - Notes: first real-code run 2026-09-24, six story-refine stories in agent-ready-assessment, reviewed by five role agents rather than run-logged; findings and the template changes in `story.md`, Field run. The run-log template is still unwritten. A second read the same day, five hats scoring implementation presence, drove 0.12.0; see `story.md`, Decided 2026-09-24, the how.
@@ -43,6 +43,7 @@ Story fixture: eleven Open lines against four cases. Epic fixture: six. Every sk
 - Notes: research in `.project/research/agentic-skills/decisions.md`. Watch whether callers need to re-invoke when a runner's answer brings Dissolves children onto the frontier.
 
 ### 3. Private dialect (value 4)
+Done 2026-10-01 in 0.20.0: presets, extension files, and sources.md removed; runner, room, seat, hat, wound, shape, and the record replaced with plain words in every shipped skill; roles fixed at Product Owner, Tech Lead, Engineer, Designer. The glossary is no longer needed.
 Runner, room, seat, hat, wound, shape, the record. Blocks marketplace adoption and is a model-correctness risk since these words carry no priors. Does not affect whether the skills work for the author today.
 Now
 - [ ] Write the glossary file: runner, room, seat, hat, wound, shape, the record, and any other word the skills lean on
@@ -61,6 +62,7 @@ After field runs
 - Notes:
 
 ### 5. Product-org sources vs plain-Jira shops (value 2)
+Dropped 2026-10-01: sources-sync and sources.md left the plugin in 0.20.0; the tracker, docs, and measures are three optional lines in the consuming repo's CLAUDE.md.
 Handled by fallbacks in each skill; the research names the tension. No further fix short of sources that do not exist. Field runs show whether the fallbacks hold.
 - [ ] Watch during item 1; write here if a fallback fails
 - Notes:

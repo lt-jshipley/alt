@@ -1,11 +1,10 @@
 # Brief: [name]
 
 **Status:** Active
-**Kind:** [developer | business | research]
 **Story:** [ticket key, or none]
 **Branches:** [branch names, or none]
 
-Load this brief, read the current phase's Load line, take the first unchecked item. At a session's end, ask for the brief to be updated. When every Done When item holds, set Status to Closed and move this file to `.agentic/briefs/closed/`.
+Load this brief, read the current phase's Load line, take the first unchecked item. At a session's end, ask for the brief to be updated. When every Done When item holds, set Status to Closed and move this file to the `closed/` folder beside it.
 
 ## Goal
 [what changes, one sentence]
@@ -36,13 +35,13 @@ Load this brief, read the current phase's Load line, take the first unchecked it
 - [ ] [task]
 - [ ] [task]
 - [ ] Close: [this phase's own check: the command, the test, or what it was reviewed against]
-- [ ] Close: brief updated, committed where git applies
+- [ ] Close: brief updated, and committed where this repo checks briefs in
 
 ### Phase 2: [name]
 **Load:** [what to read for this phase only]
 - [ ] [task]
 - [ ] Close: [this phase's own check]
-- [ ] Close: brief updated, committed where git applies
+- [ ] Close: brief updated, and committed where this repo checks briefs in
 
 ### Retro
 Read-only log. One line per finding, with a proposed home or none; brief-retro appends its disposition and the date to each line.

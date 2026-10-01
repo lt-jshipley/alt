@@ -1,6 +1,6 @@
 # alt
 
-Agentic Lean Techniques. Claude Code workflows collected from client engagements: skills, commands, agents, and hooks that have proven useful more than once.
+Agentic Lean Techniques. Claude Code workflows collected from client engagements: skills that have proven useful more than once.
 
 This repo is a Claude Code plugin marketplace named `agentic-leantechniques`. It publishes one plugin, `alt`, whose skills appear as `/alt:<skill>`.
 
@@ -15,6 +15,22 @@ Add the marketplace once, then install the plugin:
 
 Restart Claude Code after installing. Skills will show up under `/alt:`.
 
+## Configure
+
+Nothing is required. A consuming repo may add one section to the CLAUDE.md it already has; every line is optional and an absent line means the default.
+
+```
+## alt
+Tracker: Jira project ABC, through the Atlassian MCP
+Docs: docs/ and the Confluence space ABC
+Measures: the product dashboard; ask the Product Owner for a number
+Briefs: docs/briefs/
+Phase closes when: make test passes and a teammate has reviewed
+Every brief loads: docs/architecture.md
+```
+
+Defaults: the tracker is whatever tracker tool the session reaches, and a key with none is carried unread; docs are README and `docs/` when present; there are no measures, so an epic's outcome stays unmeasured; briefs go to `.briefs-local/`, which brief-create gitignores; a phase's check is written from the interview; nothing extra is loaded. Roles in every skill are Product Owner, Tech Lead, Engineer, and Designer. Decisions about a piece of work are written on its ticket.
+
 ## Layout
 
 ```
@@ -22,23 +38,21 @@ Restart Claude Code after installing. Skills will show up under `/alt:`.
 plugins/alt/                       The alt plugin
   .claude-plugin/plugin.json       Plugin manifest
   skills/<name>/SKILL.md           Skills, invoked as /alt:<name>
-    brief-create/                  Creates a brief, the personal working file that carries one piece of work across sessions, at .agentic/briefs/ in the consuming repo. Research in .project/research/agentic-skills/brief.md
-    brief-retro/                   Reads the retro lines of every closed brief together and walks them with the runner to a disposition. Appends one word and a date per line, nothing else
-    decisions/                     Lists the decisions a draft silently assumes, each with its stake and hat, interviewing nobody. Invoked by epic-refine and brief-create against their drafts. Research in .project/research/agentic-skills/decisions.md
-    epic-refine/                   Creates an epic in the tracker from an idea, a handed-down feature, or a pasted draft, or refines an existing one into a need with an outcome, a bet, and who holds each. Never creates the stories under it. Research in .project/research/agentic-skills/epic.md
-    examine/                       The decision interview for a developer working alone: grilling's tree, one question a turn, with stakes and could-help on every question. Not invoked by other skills; see decisions. Research in .project/research/agentic-skills/grill-me.md
-    orient/                        Orients the session in the work it is about to do: takes a brief, story key, branch, or a sentence, collects the core facts through .agentic/sources.md, and reports the system that work sits in. Reads only. Research in .project/research/agentic-skills/orient.md
-    peer-review/                   Reviews a change before the PR opens and again when it is reviewed, same bar both times: four parallel sonnet lenses nominate, the session verifies against the code, every finding carries evidence and a tier. Writes .agentic/reviews/<branch>.md, the record the second run reads first. Never touches the PR. Research in .project/research/agentic-skills/peer-review.md
+    brief-create/                  Creates a brief, the personal working file that carries one piece of work across sessions, at .briefs-local/ in the consuming repo, gitignored, or at the checked-in folder its CLAUDE.md names. Research in .project/research/agentic-skills/brief.md
+    brief-retro/                   Reads the retro lines of every closed brief together and walks them with the user to a disposition. Appends one word and a date per line, nothing else
+    decisions/                     Lists the decisions a draft silently assumes, each with its stake and role, interviewing nobody. Invoked by brief-create against its draft. Research in .project/research/agentic-skills/decisions.md
+    examine/                       The decision interview for a developer working alone: a tree of decisions, one question a turn, with stakes and could-help on every question. Invoked by name or by another skill; decisions is the interview-free form. Research in .project/research/agentic-skills/grill-me.md
+    orient/                        Orients the session in the work it is about to do: takes a brief, story key, branch, or a sentence, reads the ticket, the code around it, and the docs, and reports the system that work sits in. Reads only. Research in .project/research/agentic-skills/orient.md
+    peer-review/                   Reviews a change before the PR opens and again when it is reviewed, same bar both times. Fans out to cheaper sub-agents to nominate, which costs tokens, then the session verifies every finding against the code and gives it a tier. Reports where it runs and writes nothing; the second run reads the first's report from the PR when it was pasted there. Never touches the PR. Research in .project/research/agentic-skills/peer-review.md
     review-prose/                  Reviews a skill or doc for verbosity and reports what could go. Changes nothing
-    sources-sync/                  Drafts or refreshes .agentic/sources.md, the one page that tells every alt skill where this team's facts live: code, docs, tracker, record, measures, people. Asks which tools the team uses and fills the seats from stacks.md defaults for GitHub, Atlassian, and Azure DevOps
-    triage/                        Reads a scope of open work in full and says what its symptoms are symptoms of: fixes what the record settles, routes what nobody holds as an Open line to the holder, names what is holding. Never grades or orders. Research in .project/research/agentic-skills/triage.md
-  presets/                         Word and hat swaps per kind of work, shared by skills that take a preset: developer, business, research
+    triage/                        Reads a scope of open work in full and says what its symptoms are symptoms of: fixes what the tickets settle, routes what nobody holds as an Open line to the holder, names what is holding. Never grades or orders. Names lt-backlog's epic-create for a parent not in the epic format. Research in .project/research/agentic-skills/triage.md
 
-The story and epic skills written from the business side, story-create, story-review, epic-create, and epic-review, moved to the lt-backlog-skills repo and install from there as the lt-backlog plugin.
-.agentic/                          Reserved here; in a consuming repo this holds sources.md, alt extension files, and the gitignored briefs/ folder
+.briefs-local/                     In a consuming repo, the briefs folder, gitignored; a `Briefs:` line under `## alt` in CLAUDE.md moves them to a checked-in folder
 .claude/                           Reserved for Claude Code config for working in this repo itself; empty so far
-.project/archive/skills/           Skills removed from the plugin, kept for the record; not loaded by Claude Code
+.project/archive/                  Skills and presets removed from the plugin, kept for history; not loaded by Claude Code
 ```
+
+The story and epic skills written from the business side, story-create, story-review, epic-create, and epic-review, moved to the lt-backlog-skills repo and install from there as the lt-backlog plugin. epic-refine followed in 0.20.0, since epic-create covers both creating and rewriting an epic; sources-sync and the presets went to the archive at the same time, replaced by the `## alt` section above.
 
 Add `agents/`, `commands/`, or `hooks/hooks.json` under `plugins/alt/` as those are needed.
 

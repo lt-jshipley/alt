@@ -1,6 +1,6 @@
 ---
 name: peer-review
-description: Reviews a change before the PR opens and again when it is reviewed, with the same bar both times, so the reviewer never finds what the author's run could not. Cheap lenses nominate, the session verifies against the code, and every finding carries evidence and a tier. Writes a record the next run reads first. Use when the user asks to review a branch or PR, or invokes /alt:peer-review.
+description: Reviews a change before the PR opens and again when it is reviewed, with the same bar both times, so the reviewer never finds what the author's run could not. Cheap lenses nominate, the session verifies against the code, and every finding carries evidence and a tier. Reports where it runs and writes nothing. Use when the user asks to review a branch or PR, or invokes /alt:peer-review.
 argument-hint: [branch, PR number, or nothing for the current branch]
 ---
 
@@ -14,7 +14,7 @@ The change: $ARGUMENTS names a branch or PR number, else the current branch agai
 
 The intent: the linked ticket when one exists and the tracker is reachable, else the PR description, else the branch's commits.
 
-Read if present, ignore if absent: `.agentic/sources.md`, where this team's facts live; the repo's `CLAUDE.md`, `CONTRIBUTING.md`, and whatever sources names as conventions; `.agentic/reviews/<branch>.md`, the prior record.
+Read if present, ignore if absent: the `## alt` section of the repo's CLAUDE.md, its `Tracker:` line for the ticket; the repo's `CLAUDE.md` and `CONTRIBUTING.md` as conventions; the prior run's report when the PR carries one.
 
 ## Nominate
 
@@ -47,7 +47,7 @@ At most seven findings across the top two tiers, ranked by cost. The rest go to 
 ## Report
 
 ```
-Review of <branch or PR>, against <base>. Intent: <ticket key, description, or commits>. Rung: <which>.
+Review of <branch or PR> at <commit>, against <base>. Intent: <ticket key, description, or commits>. Rung: <which>.
 
 Blocks
 - <file:line> <claim>
@@ -62,23 +62,23 @@ Post-merge
 Nitpicks
 - <file:line> <claim>
 
-Confirmed from prior record: <n>. Closed: <n>. New since: <n>.
+Confirmed from the prior report: <n>. Closed: <n>. New since: <n>.
 Read: <what>. Not read: <what, each named once>.
 ```
 
-Sections with nothing in them are omitted. Written to `.agentic/reviews/<branch>.md` and shown in the room. The file is the record the next run reads.
+Sections with nothing in them are omitted. Shown where the skill runs and nowhere else; the closing line names the PR as where it goes and recommends the paste. The second run reads it there.
 
 ## Second run
 
-When a prior record exists, verify it before anything else: each finding is confirmed, closed by the change since, or reopened with new evidence. Then nominate and verify over the delta since the record's commit only, never the whole diff again. A finding that was closed is never raised again on the same evidence. New since is where the second run earns its keep, and it is usually short.
+When a prior report exists, verify it before anything else: each finding is confirmed, closed by the change since, or reopened with new evidence. Then nominate and verify over the commits since the one that report names only, never the whole diff again. A finding that was closed is never raised again on the same evidence. New since is where the second run earns its keep, and it is usually short.
 
 ## Rules
 
-- Never comments on, commits to, or pushes to the PR or the branch. The record file and the room are the only outputs.
+- Never comments on, commits to, or pushes to the PR or the branch. The report where the skill runs is the only output; it writes no file.
 - Never applies a fix, at any tier.
 - Confidence is not evidence. A model saying it is sure, or six lenses agreeing, proves nothing the code did not.
 - A run that did not happen is never claimed. The rung is mandatory and the command is quoted.
-- Same lenses, same bar, both seats. A reviewer adds no lens the author's run lacked.
+- Same lenses, same bar, both runs. A reviewer adds no lens the author's run lacked.
 - Non-interactive: review what the inputs settle and stop.
 
 ## When something is missing, say so in one line
